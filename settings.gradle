@@ -1,0 +1,2 @@
+rootProject.name='technopolis-spring-2020'
+include ':app'
