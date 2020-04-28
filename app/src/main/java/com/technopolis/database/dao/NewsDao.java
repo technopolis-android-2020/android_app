@@ -17,8 +17,8 @@ public interface NewsDao {
     @Query("SELECT * FROM news")
     LiveData<List<News>> getAll();
 
-    @Query("SELECT * FROM news WHERE id = :id")
-    News getNewsById(int id);
+    @Query("SELECT * FROM news WHERE publication_date = :publication_date")
+    List<News> getNewsByPublicationDate(long publication_date);
 
     @Insert
     void insertAll(News... news);
@@ -30,5 +30,5 @@ public interface NewsDao {
     void deleteAll(News... news);
 
     @Delete
-    void deleteNews(News news);
+    void deleteNewsByTitle(String title);
 }

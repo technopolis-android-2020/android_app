@@ -31,7 +31,7 @@ public class News {
     @ColumnInfo(name = "publication_date")
     private long publicationDate;
 
-    public News(int id, @NonNull String title, @NonNull String previewImgUrl, @NonNull String body, @NonNull String url, long publicationDate) {
+    public News(final int id, @NonNull final String title, @NonNull final String previewImgUrl, @NonNull final String body, @NonNull final String url, final long publicationDate) {
         this.id = id;
         this.title = title;
         this.previewImgUrl = previewImgUrl;
@@ -41,7 +41,7 @@ public class News {
     }
 
     @Ignore
-    public News(@NonNull String title, @NonNull String previewImgUrl, @NonNull String body, @NonNull String url, long publicationDate) {
+    public News(@NonNull final String title, @NonNull final String previewImgUrl, @NonNull final String body, @NonNull final String url, final long publicationDate) {
         this.title = title;
         this.previewImgUrl = previewImgUrl;
         this.body = body;
@@ -57,35 +57,39 @@ public class News {
         this.id = id;
     }
 
+    @NonNull
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(@NonNull String title) {
+    public void setTitle(@NonNull final String title) {
         this.title = title;
     }
 
+    @NonNull
     public String getPreviewImgUrl() {
         return previewImgUrl;
     }
 
-    public void setPreviewImgUrl(@NonNull String previewImgUrl) {
+    public void setPreviewImgUrl(@NonNull final String previewImgUrl) {
         this.previewImgUrl = previewImgUrl;
     }
 
+    @NonNull
     public String getBody() {
         return body;
     }
 
-    public void setBody(@NonNull String body) {
+    public void setBody(@NonNull final String body) {
         this.body = body;
     }
 
+    @NonNull
     public String getUrl() {
         return url;
     }
 
-    public void setUrl(@NonNull String url) {
+    public void setUrl(@NonNull final String url) {
         this.url = url;
     }
 
