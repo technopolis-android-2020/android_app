@@ -1,6 +1,7 @@
 package com.technopolis.database.repositories;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
@@ -18,10 +19,10 @@ public class NewsRepository{
     private LiveData<List<News>> allProducts;
     private NewsDao newsDao;
 
-    public NewsRepository(final Application application) {
-        AppDatabase db = AppDatabase.getInstance(application);
+    public NewsRepository(final Context context) {
+        AppDatabase db = AppDatabase.getInstance(context);
         newsDao = db.newsDao();
-        allProducts = newsDao.getAll();
+        //allProducts = newsDao.getAll();
     }
 
     private void asyncFinished(final List<News> result){
@@ -32,20 +33,24 @@ public class NewsRepository{
         InsertAsyncTask task = new InsertAsyncTask(newsDao);
         task.execute(news);
     }
-
+/*
     public void deleteProduct(final String name) {
         DeleteAsyncTask task = new DeleteAsyncTask(newsDao);
         task.execute(name);
     }
-
+*/
     public void findProduct(final String name) {
         QueryAsyncTask task = new QueryAsyncTask(newsDao);
         task.delegate = this;
         task.execute(name);
     }
 
-    public LiveData<List<News>> getAllProducts() {
-        return allProducts;
+    //public LiveData<List<News>> getAllProducts() {
+//        return allProducts;
+//    }
+
+    public List<News> getAllProducts() {
+        return newsDao.getAll();
     }
 
     public MutableLiveData<List<News>> getSearchResults() {
@@ -86,7 +91,7 @@ public class NewsRepository{
             return null;
         }
     }
-
+/*
     private static class DeleteAsyncTask extends AsyncTask<String, Void, Void> {
 
         private NewsDao asyncTaskDao;
@@ -101,4 +106,5 @@ public class NewsRepository{
             return null;
         }
     }
+ */
 }

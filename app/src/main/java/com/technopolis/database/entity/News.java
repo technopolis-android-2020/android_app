@@ -29,9 +29,11 @@ public class News {
     private String url;
 
     @ColumnInfo(name = "publication_date")
-    private long publicationDate;
+    private String publicationDate;
 
-    public News(final int id, @NonNull final String title, @NonNull final String previewImgUrl, @NonNull final String body, @NonNull final String url, final long publicationDate) {
+    public News(final int id, @NonNull final String title,
+                @NonNull final String previewImgUrl, @NonNull final String body,
+                @NonNull final String url, final String publicationDate) {
         this.id = id;
         this.title = title;
         this.previewImgUrl = previewImgUrl;
@@ -41,7 +43,9 @@ public class News {
     }
 
     @Ignore
-    public News(@NonNull final String title, @NonNull final String previewImgUrl, @NonNull final String body, @NonNull final String url, final long publicationDate) {
+    public News(@NonNull final String title, @NonNull final String previewImgUrl,
+                @NonNull final String body, @NonNull final String url,
+                final String publicationDate) {
         this.title = title;
         this.previewImgUrl = previewImgUrl;
         this.body = body;
@@ -93,11 +97,11 @@ public class News {
         this.url = url;
     }
 
-    public long getPublicationDate() {
+    public String getPublicationDate() {
         return publicationDate;
     }
 
-    public void setPublicationDate(long publicationDate) {
+    public void setPublicationDate(String publicationDate) {
         this.publicationDate = publicationDate;
     }
 }

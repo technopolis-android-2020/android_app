@@ -15,7 +15,7 @@ import androidx.room.Update;
 public interface NewsDao {
 
     @Query("SELECT * FROM news")
-    LiveData<List<News>> getAll();
+    List<News> getAll();
 
     @Query("SELECT * FROM news WHERE publication_date = :publication_date")
     List<News> getNewsByPublicationDate(long publication_date);
@@ -27,8 +27,8 @@ public interface NewsDao {
     void insertNews(News news);
 
     @Query("DELETE FROM news")
-    void deleteAll(News... news);
+    void deleteAll(/*List<News> news*/);
 
-    @Delete
+    @Query("DELETE FROM news WHERE news.title == :title")
     void deleteNewsByTitle(String title);
 }
