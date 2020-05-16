@@ -13,6 +13,9 @@ import android.widget.ProgressBar;
 import com.technopolis.R;
 import com.technopolis.adapter.MainActivityAdapter;
 import com.android.volley.Request;
+import com.technopolis.components.DaggerDatabaseComponent;
+import com.technopolis.components.DatabaseComponent;
+import com.technopolis.modules.ContextModule;
 import com.technopolis.request.RequestBuilder;
 import com.technopolis.request.RequestService;
 import com.technopolis.database.repositories.NewsRepository;
@@ -22,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private Context context;
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
-    private NewsRepository newsRepository;
+    NewsRepository newsRepository;
 
     private static String newsUrl = "https://guarded-gorge-91889.herokuapp.com/api/v1/news/getAll";
 
@@ -31,10 +34,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        DatabaseComponent databaseComponent = DaggerDatabaseComponent
+                .builder()
+                .contextModule(new ContextModule(this))
+                .build();
+
         context = this;
         recyclerView = findViewById(R.id.main_rv);
         progressBar = findViewById(R.id.main_progress);
-        newsRepository = new NewsRepository(this);
+        newsRepository = databaseComponent.getNewsRepository();
 
         new DownloadNewsAsyncTask().execute(newsUrl);
 
