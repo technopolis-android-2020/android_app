@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
     private static NewsServerAPI newsServerAPI;
 
-    public RetrofitClient() {
+    private RetrofitClient() {
     }
 
     @NonNull
