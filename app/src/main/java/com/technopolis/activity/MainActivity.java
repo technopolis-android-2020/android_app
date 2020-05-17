@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchData() {
-        compositeDisposable.add(new RetrofitClient().getNewsResponse()
+        compositeDisposable.add(RetrofitClient.getNewsResponse()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<NewsResponse>>() {

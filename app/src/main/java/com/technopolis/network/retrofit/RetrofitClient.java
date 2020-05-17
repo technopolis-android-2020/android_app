@@ -13,19 +13,21 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
-    private NewsServerAPI newsServerAPI;
+    private static NewsServerAPI newsServerAPI;
 
     public RetrofitClient() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://guarded-gorge-91889.herokuapp.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build();
-        newsServerAPI = retrofit.create(NewsServerAPI.class);
     }
 
     @NonNull
-    public Observable<List<NewsResponse>> getNewsResponse() {
+    public static Observable<List<NewsResponse>> getNewsResponse() {
+        if (newsServerAPI == null){
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("https://guarded-gorge-91889.herokuapp.com/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .build();
+            newsServerAPI = retrofit.create(NewsServerAPI.class);
+        }
         return newsServerAPI.getNews();
     }
 }
