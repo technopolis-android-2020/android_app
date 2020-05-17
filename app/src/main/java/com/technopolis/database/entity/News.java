@@ -28,18 +28,33 @@ public class News {
     @NonNull
     private String url;
 
+    @ColumnInfo(name = "agent")
+    @NonNull
+    private String agent;
+
+    @NonNull
+    public String getAgent() {
+        return agent;
+    }
+
+    public void setAgent(@NonNull String agent) {
+        this.agent = agent;
+    }
+
     @ColumnInfo(name = "publication_date")
     private String publicationDate;
 
     public News(final int id, @NonNull final String title,
                 @NonNull final String previewImgUrl, @NonNull final String body,
-                @NonNull final String url, final String publicationDate) {
+                @NonNull final String url, final String publicationDate,
+                @NonNull final String agent) {
         this.id = id;
         this.title = title;
         this.previewImgUrl = previewImgUrl;
         this.body = body;
         this.url = url;
         this.publicationDate = publicationDate;
+        this.agent = agent;
     }
 
     @Ignore

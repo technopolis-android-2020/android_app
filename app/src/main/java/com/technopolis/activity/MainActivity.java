@@ -1,80 +1,68 @@
 package com.technopolis.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.view.View;
 import android.os.Bundle;
-import android.os.AsyncTask;
-import android.content.Context;
-import android.widget.ProgressBar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.technopolis.R;
-import com.technopolis.adapter.MainActivityAdapter;
-import com.android.volley.Request;
-import com.technopolis.request.RequestBuilder;
-import com.technopolis.request.RequestService;
-import com.technopolis.database.repositories.NewsRepository;
+import com.technopolis.adapter.NewsAdapter;
+import com.technopolis.network.model.NewsResponse;
+import com.technopolis.network.retrofit.NewsServerAPI;
+import com.technopolis.network.retrofit.RetrofitClient;
+
+import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Context context;
-    private ProgressBar progressBar;
-    private RecyclerView recyclerView;
-    private NewsRepository newsRepository;
-
-    private static String newsUrl = "https://guarded-gorge-91889.herokuapp.com/api/v1/news/getAll";
+    NewsServerAPI newsServerAPI;
+    RecyclerView recyclerView;
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        context = this;
+        //init Retrofit
+        Retrofit retrofit = RetrofitClient.getInstance();
+        newsServerAPI = retrofit.create(NewsServerAPI.class);
+
+        //view
         recyclerView = findViewById(R.id.main_rv);
-        progressBar = findViewById(R.id.main_progress);
-        newsRepository = new NewsRepository(this);
-
-        new DownloadNewsAsyncTask().execute(newsUrl);
-
-        recyclerView.setAdapter(
-                new MainActivityAdapter(newsRepository.getAllProducts())
-        );
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        fetchData();
     }
 
-    class DownloadNewsAsyncTask extends AsyncTask<String, Integer, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressBar.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.INVISIBLE);
-        }
-
-        @Override
-        protected Void doInBackground(String... params) {
-            String url = params[0];
-            Request newsRequest = RequestService
-                    .getInstance(context)
-                    .addToRequestQueue(
-                            RequestBuilder.loadAllNewsRequest(url, newsRepository)
-                    );
-
-            while (!newsRequest.hasHadResponseDelivered()) {
-
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            progressBar.setVisibility(View.INVISIBLE);
-            recyclerView.setVisibility(View.VISIBLE);
-        }
+    @Override
+    protected void onStop() {
+        compositeDisposable.clear();
+        super.onStop();
     }
 
+    private void fetchData() {
+        compositeDisposable.add(newsServerAPI.getNews()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<NewsResponse>>() {
+                    @Override
+                    public void accept(List<NewsResponse> newsResponses) throws Exception {
+                        displayData(newsResponses);
+                    }
+                }));
+    }
+
+    private void displayData(List<NewsResponse> newsResponses) {
+        NewsAdapter adapter = new NewsAdapter(this, newsResponses);
+        recyclerView.setAdapter(adapter);
+    }
 }

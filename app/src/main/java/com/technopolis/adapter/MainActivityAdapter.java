@@ -1,3 +1,4 @@
+/*
 package com.technopolis.adapter;
 
 import android.view.View;
@@ -52,3 +53,4 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
     }
 
 }
+*/
