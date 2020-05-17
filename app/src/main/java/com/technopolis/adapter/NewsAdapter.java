@@ -1,6 +1,5 @@
 package com.technopolis.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,7 @@ import com.technopolis.network.model.NewsResponse;
 import java.util.List;
 
 /*
-* Этот адаптер для работы с сервером, временная мера
+ * Этот адаптер для работы с сервером, временная мера
  */
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
 
@@ -24,7 +23,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     public NewsAdapter() {
     }
 
-    public void updateAdapter(List<NewsResponse> newsList){
+    public void updateAdapter(List<NewsResponse> newsList) {
         this.newsList = newsList;
     }
 
