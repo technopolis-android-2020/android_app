@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void displayData(List<NewsResponse> newsResponses) {
-        NewsAdapter adapter = new NewsAdapter(this, newsResponses);
+        NewsAdapter adapter = new NewsAdapter(newsResponses);
         recyclerView.setAdapter(adapter);
     }
 }
