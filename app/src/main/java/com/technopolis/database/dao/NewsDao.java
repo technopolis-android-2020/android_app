@@ -21,7 +21,7 @@ public interface NewsDao {
     List<News> getNewsByPublicationDate(long publication_date);
 
     @Insert
-    void insertAll(News... news);
+    void insertAll(List<News> news);
 
     @Insert
     void insertNews(News news);

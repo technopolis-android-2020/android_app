@@ -47,12 +47,7 @@ public class MainActivity extends AppCompatActivity {
         compositeDisposable.add(RetrofitClient.getNewsResponse()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<NewsResponse>>() {
-                    @Override
-                    public void accept(List<NewsResponse> newsResponses) throws Exception {
-                        displayData(newsResponses);
-                    }
-                }));
+                .subscribe(this::displayData));
     }
 
     private void displayData(List<NewsResponse> newsResponses) {

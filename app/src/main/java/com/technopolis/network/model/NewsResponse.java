@@ -1,12 +1,10 @@
 package com.technopolis.network.model;
 
-import java.util.Date;
-
 public class NewsResponse {
-    public Date date;
+    public String date;
     public String agent;
     public String logo;
-    public long id;
+    public int id;
     public String title;
     public String body;
     public String url;
@@ -14,7 +12,7 @@ public class NewsResponse {
     public NewsResponse() {
     }
 
-    public NewsResponse(Date date, String agent, String logo, long id, String title, String body, String url) {
+    public NewsResponse(String date, String agent, String logo, int id, String title, String body, String url) {
         this.date = date;
         this.agent = agent;
         this.logo = logo;
