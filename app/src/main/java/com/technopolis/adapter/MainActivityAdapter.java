@@ -32,7 +32,7 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
 
         void bind(News news) {
             textView.setText(news.getTitle());
-            Glide.with(imageView.getContext()).load(news.getPreviewImgUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
+            Glide.with(imageView.getContext()).load(news.getPreviewImgUrl()).into(imageView);
         }
     }
 
