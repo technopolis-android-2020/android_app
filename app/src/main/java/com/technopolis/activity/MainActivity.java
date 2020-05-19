@@ -28,8 +28,6 @@ public class MainActivity extends AppCompatActivity {
     @Inject
     NewsRepository newsRepository;
 
-    private static String newsUrl = "https://guarded-gorge-91889.herokuapp.com/api/v1/news/getAll";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.main_rv);
         progressBar = findViewById(R.id.main_progress);
 
+        String newsUrl = "https://guarded-gorge-91889.herokuapp.com/api/v1/news/getAll";
         new DownloadNewsAsyncTask().execute(newsUrl);
 
         recyclerView.setAdapter(
