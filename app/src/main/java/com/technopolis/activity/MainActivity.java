@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.technopolis.R;
 import com.technopolis.adapter.NewsAdapter;
 import com.technopolis.network.model.NewsResponse;
-import com.technopolis.network.retrofit.RetrofitClient;
+import com.technopolis.network.retrofit.HttpClient;
 
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchData() {
-        compositeDisposable.add(RetrofitClient.getNewsResponse()
+        compositeDisposable.add(new HttpClient().getNewsResponse()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<NewsResponse>>() {
