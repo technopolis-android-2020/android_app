@@ -1,83 +1,64 @@
 package com.technopolis.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.view.View;
 import android.os.Bundle;
-import android.os.AsyncTask;
-import android.content.Context;
-import android.widget.ProgressBar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.technopolis.App;
 import com.technopolis.R;
-import com.technopolis.adapter.MainActivityAdapter;
-import com.android.volley.Request;
-import com.technopolis.request.RequestBuilder;
-import com.technopolis.request.RequestService;
+import com.technopolis.adapter.NewsAdapter;
 import com.technopolis.database.repositories.NewsRepository;
+import com.technopolis.network.model.NewsResponse;
+import com.technopolis.network.retrofit.HttpClient;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+
+
 public class MainActivity extends AppCompatActivity {
 
-    private Context context;
-    private ProgressBar progressBar;
-    private RecyclerView recyclerView;
+    RecyclerView recyclerView;
+    final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    final NewsAdapter adapter = new NewsAdapter();
     @Inject
-    NewsRepository newsRepository;
+    HttpClient httpClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ((App) getApplication()).getAppComponent().inject(this);
-
-        context = this;
+        
+        //view
         recyclerView = findViewById(R.id.main_rv);
-        progressBar = findViewById(R.id.main_progress);
-
-        String newsUrl = "https://guarded-gorge-91889.herokuapp.com/api/v1/news/getAll";
-        new DownloadNewsAsyncTask().execute(newsUrl);
-
-        recyclerView.setAdapter(
-                new MainActivityAdapter(newsRepository.getAllProducts())
-        );
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        fetchData();
     }
 
-    class DownloadNewsAsyncTask extends AsyncTask<String, Integer, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressBar.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.INVISIBLE);
-        }
-
-        @Override
-        protected Void doInBackground(String... params) {
-            String url = params[0];
-            Request newsRequest = RequestService
-                    .getInstance(context)
-                    .addToRequestQueue(
-                            RequestBuilder.loadAllNewsRequest(url, newsRepository)
-                    );
-
-            while (!newsRequest.hasHadResponseDelivered()) {
-
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            progressBar.setVisibility(View.INVISIBLE);
-            recyclerView.setVisibility(View.VISIBLE);
-        }
+    @Override
+    protected void onDestroy() {
+        compositeDisposable.clear();
+        super.onDestroy();
     }
 
+    private void fetchData() {
+        compositeDisposable.add(httpClient.getNewsResponse()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::displayData));
+    }
+
+    private void displayData(List<NewsResponse> newsResponses) {
+        adapter.updateAdapter(newsResponses);
+        recyclerView.setAdapter(adapter);
+    }
 }

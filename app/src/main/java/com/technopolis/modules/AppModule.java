@@ -3,6 +3,7 @@ package com.technopolis.modules;
 import android.content.Context;
 
 import com.technopolis.database.repositories.NewsRepository;
+import com.technopolis.network.retrofit.HttpClient;
 
 import javax.inject.Singleton;
 
@@ -22,6 +23,12 @@ public class AppModule {
     @Singleton
     NewsRepository provideNewsRepository(Context context){
         return new NewsRepository(context);
+    }
+
+    @Provides
+    @Singleton
+    HttpClient provideHttpClient() {
+        return new HttpClient();
     }
 
     @Provides
