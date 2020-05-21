@@ -7,9 +7,7 @@ import android.widget.TextView;
 import android.view.LayoutInflater;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.technopolis.R;
-import com.technopolis.activity.MainActivity;
 import com.technopolis.database.entity.News;
 
 import java.util.List;
