@@ -3,10 +3,16 @@ package com.technopolis.database.entity;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "news")
+@Entity(tableName = "news",
+        foreignKeys =
+        @ForeignKey(entity =
+                Agent.class,
+                parentColumns = "id",
+                childColumns = "agent_id"))
 public class News {
 
     @PrimaryKey(autoGenerate = true)
@@ -31,26 +37,62 @@ public class News {
     @ColumnInfo(name = "publication_date")
     private String publicationDate;
 
+    @ColumnInfo(name = "agent_id")
+    private int agentId;
+
+    @Ignore
+    private String agentName;
+
     public News(final int id, @NonNull final String title,
                 @NonNull final String previewImgUrl, @NonNull final String body,
-                @NonNull final String url, final String publicationDate) {
+                @NonNull final String url, final String publicationDate, final int agentId) {
         this.id = id;
         this.title = title;
         this.previewImgUrl = previewImgUrl;
         this.body = body;
         this.url = url;
         this.publicationDate = publicationDate;
+        this.agentId = agentId;
     }
 
-    @Ignore
-    public News(@NonNull final String title, @NonNull final String previewImgUrl,
-                @NonNull final String body, @NonNull final String url,
-                final String publicationDate) {
+    public News(final int id, @NonNull final String title,
+                @NonNull final String previewImgUrl, @NonNull final String body,
+                @NonNull final String url, final String publicationDate, final String agentName) {
+        this.id = id;
         this.title = title;
         this.previewImgUrl = previewImgUrl;
         this.body = body;
         this.url = url;
         this.publicationDate = publicationDate;
+        this.agentName = agentName;
+    }
+
+    @Ignore
+    public News(@NonNull final String title, @NonNull final String previewImgUrl,
+                @NonNull final String body, @NonNull final String url,
+                final String publicationDate, final String agentName) {
+        this.title = title;
+        this.previewImgUrl = previewImgUrl;
+        this.body = body;
+        this.url = url;
+        this.publicationDate = publicationDate;
+        this.agentName = agentName;
+    }
+
+    public String getAgentName() {
+        return agentName;
+    }
+
+    public void setAgentName(String agentName) {
+        this.agentName = agentName;
+    }
+
+    public int getAgentId() {
+        return agentId;
+    }
+
+    public void setAgent_id(int agentId) {
+        this.agentId = agentId;
     }
 
     public int getId() {

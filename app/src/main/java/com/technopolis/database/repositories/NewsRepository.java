@@ -8,7 +8,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.technopolis.database.AppDatabase;
+import com.technopolis.database.dao.AgentDao;
 import com.technopolis.database.dao.NewsDao;
+import com.technopolis.database.entity.Agent;
 import com.technopolis.database.entity.News;
 
 import java.util.List;
@@ -18,10 +20,12 @@ public class NewsRepository{
     private final MutableLiveData<List<News>> searchResults = new MutableLiveData<>();
     private LiveData<List<News>> allProducts;
     private NewsDao newsDao;
+    private AgentDao agentDao;
 
     public NewsRepository(final Context context) {
         AppDatabase db = AppDatabase.getInstance(context);
         newsDao = db.newsDao();
+        agentDao = db.agentDao();
         //allProducts = newsDao.getAll();
     }
 
@@ -30,7 +34,7 @@ public class NewsRepository{
     }
 
     public void insertProduct(final News news) {
-        InsertAsyncTask task = new InsertAsyncTask(newsDao);
+        InsertAsyncTask task = new InsertAsyncTask(newsDao, agentDao);
         task.execute(news);
     }
 /*
@@ -80,14 +84,21 @@ public class NewsRepository{
     private static class InsertAsyncTask extends AsyncTask<News, Void, Void> {
 
         private NewsDao asyncTaskDao;
+        private AgentDao agentDao;
 
-        InsertAsyncTask(NewsDao dao) {
+        InsertAsyncTask(NewsDao dao, AgentDao agentDao) {
             asyncTaskDao = dao;
+            this.agentDao = agentDao;
         }
 
         @Override
         protected Void doInBackground(final News... params) {
-            asyncTaskDao.insertNews(params[0]);
+            News news = params[0];
+            Agent agent;
+            if ( (agent = agentDao.getAgent(news.getAgentName())) != null) {
+                news.setAgent_id(agent.id);
+                asyncTaskDao.insertNews(news);
+            }
             return null;
         }
     }
