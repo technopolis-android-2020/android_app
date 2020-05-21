@@ -1,7 +1,6 @@
 package com.technopolis.database.repositories;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -14,51 +13,33 @@ import com.technopolis.network.model.NewsResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Completable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableCompletableObserver;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.Observable;
 
 public class NewsRepository{
 
     private final MutableLiveData<List<News>> searchResults = new MutableLiveData<>();
     private LiveData<List<News>> allProducts;
     private NewsDao newsDao;
-    private static final String LOG_TAG = NewsRepository.class.getSimpleName();
 
     public NewsRepository(final Context context) {
         AppDatabase db = AppDatabase.getInstance(context);
         newsDao = db.newsDao();
     }
 
-    public void insertNews(final NewsResponse newsResponse) {
-        News news = new News(newsResponse.id, newsResponse.title, newsResponse.logo,
+    private News convertNews(final NewsResponse newsResponse){
+        return new News(newsResponse.id, newsResponse.title, newsResponse.logo,
                 newsResponse.body, newsResponse.url, newsResponse.date, newsResponse.agent);
-
-        Completable
-                .complete()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableCompletableObserver() {
-                    @Override
-                    public void onComplete() {
-                        newsDao.insertNews(news);
-                        Log.d(LOG_TAG, "News inserted");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(LOG_TAG, "News insertion failed");
-                    }
-                });
     }
 
-    public List<News> getAllNews() {
+    public void insertNews(final NewsResponse newsResponse) {
+        newsDao.insertNews(convertNews(newsResponse));
+    }
+
+    public Observable<List<News>> getAllNews() {
         return newsDao.getAll();
     }
 
     private List<News> castToNews(final List<NewsResponse> newsResponses){
-
         List<News> news = new ArrayList<>();
         for (NewsResponse response:newsResponses
              ) {
@@ -69,22 +50,7 @@ public class NewsRepository{
     }
 
     public void insertAllNews(final List<NewsResponse> newsResponses) {
-        Completable
-                .complete()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableCompletableObserver() {
-                    @Override
-                    public void onComplete() {
-                        newsDao.insertAll(castToNews(newsResponses));
-                        Log.d(LOG_TAG, "All news inserted");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(LOG_TAG, "All news insertion failed");
-                    }
-                });
+        newsDao.insertAll(castToNews(newsResponses));
     }
 
 /*

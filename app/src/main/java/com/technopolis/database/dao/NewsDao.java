@@ -4,18 +4,17 @@ import com.technopolis.database.entity.News;
 
 import java.util.List;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.Update;
+
+import io.reactivex.Observable;
 
 @Dao
 public interface NewsDao {
 
     @Query("SELECT * FROM news")
-    List<News> getAll();
+    Observable<List<News>> getAll();
 
     @Query("SELECT * FROM news WHERE publication_date = :publication_date")
     List<News> getNewsByPublicationDate(long publication_date);
