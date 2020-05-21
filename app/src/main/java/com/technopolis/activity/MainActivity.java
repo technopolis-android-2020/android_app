@@ -3,17 +3,9 @@ package com.technopolis.activity;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.View;
-import android.os.Bundle;
-import android.os.AsyncTask;
-import android.content.Context;
-import android.widget.ProgressBar;
-
-import com.technopolis.App;
 import com.technopolis.App;
 import com.technopolis.R;
 import com.technopolis.adapter.NewsAdapter;
@@ -26,6 +18,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -69,5 +62,4 @@ public class MainActivity extends AppCompatActivity {
         adapter.updateAdapter(newsResponses);
         recyclerView.setAdapter(adapter);
     }
-
 }
