@@ -11,6 +11,7 @@ import com.technopolis.R;
 import com.technopolis.adapter.ListOfAgentsAdapter;
 import com.technopolis.adapter.NewsAdapter;
 import com.technopolis.database.repositories.AgentRepository;
+import com.technopolis.network.model.AgentsResponse;
 import com.technopolis.network.model.NewsResponse;
 import com.technopolis.network.retrofit.HttpClient;
 
@@ -20,7 +21,6 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -62,16 +62,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchData() {
-        compositeDisposable.add(httpClient.getNewsResponse()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::displayData));
+        compositeDisposable.addAll(
+                httpClient.getNewsResponse()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::displayNews),
+                httpClient.getAgentsResponse()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::displayAgents)
+        );
     }
 
-    private void displayData(List<NewsResponse> newsResponses) {
+    private void displayNews(List<NewsResponse> newsResponses) {
         adapter.updateAdapter(newsResponses);
-        listOfAgentsAdapter.updateAdapter(agentRepository.getAgents());
         recyclerView.setAdapter(adapter);
+    }
+
+    private void displayAgents(List<AgentsResponse> agentsResponses) {
+        listOfAgentsAdapter.updateAdapter(agentsResponses);
         listOfAgents.setAdapter(listOfAgentsAdapter);
     }
 }
