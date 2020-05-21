@@ -14,6 +14,8 @@ import com.technopolis.network.retrofit.HttpClient;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
@@ -25,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     final CompositeDisposable compositeDisposable = new CompositeDisposable();
     final NewsAdapter adapter = new NewsAdapter();
+    @Inject
+    HttpClient httpClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +36,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ((App) getApplication()).getAppComponent().inject(this);
 
+
         //view
         recyclerView = findViewById(R.id.main_rv);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
         fetchData();
     }
@@ -47,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchData() {
-        compositeDisposable.add(new HttpClient().getNewsResponse()
+        compositeDisposable.add(httpClient.getNewsResponse()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<NewsResponse>>() {
