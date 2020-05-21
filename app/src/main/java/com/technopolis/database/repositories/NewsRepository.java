@@ -53,37 +53,4 @@ public class NewsRepository{
         newsDao.insertAll(castToNews(newsResponses));
     }
 
-/*
-    public void deleteProduct(final String name) {
-        DeleteAsyncTask task = new DeleteAsyncTask(newsDao);
-        task.execute(name);
-    }
-*/
-
-/*
-    public MutableLiveData<List<News>> getSearchResults() {
-        return searchResults;
-    }
-*/
-
-/*
-    private static class QueryAsyncTask extends AsyncTask<String, Void, List<News>>{
-        private NewsDao asyncTaskDao;
-
-        @Override
-        protected List<News> doInBackground(final String... strings) {
-            return asyncTaskDao.getNewsByPublicationDate(Long.parseLong(strings[0]));
-        }
-    }
-*/
-
-/*
-    private static class DeleteAsyncTask extends AsyncTask<String, Void, Void> {
-        @Override
-        protected Void doInBackground(final String... params) {
-            asyncTaskDao.deleteNewsByTitle(params[0]);
-            return null;
-        }
-    }
- */
 }
