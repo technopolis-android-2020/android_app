@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.technopolis.App;
 import com.technopolis.R;
 import com.technopolis.adapter.NewsAdapter;
 import com.technopolis.network.model.NewsResponse;
@@ -18,6 +19,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
+
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
@@ -28,10 +30,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ((App) getApplication()).getAppComponent().inject(this);
 
         //view
         recyclerView = findViewById(R.id.main_rv);
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(tru
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         fetchData();
