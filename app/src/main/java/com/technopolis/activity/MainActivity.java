@@ -12,8 +12,10 @@ import android.widget.ProgressBar;
 
 import com.technopolis.App;
 import com.technopolis.R;
+import com.technopolis.adapter.ListOfAgentsAdapter;
 import com.technopolis.adapter.MainActivityAdapter;
 import com.android.volley.Request;
+import com.technopolis.database.repositories.AgentRepository;
 import com.technopolis.request.RequestBuilder;
 import com.technopolis.request.RequestService;
 import com.technopolis.database.repositories.NewsRepository;
@@ -25,10 +27,13 @@ public class MainActivity extends AppCompatActivity {
     private Context context;
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
+    private RecyclerView listOfAgents;
     @Inject
     NewsRepository newsRepository;
+    @Inject
+    AgentRepository agentRepository;
 
-    private static String newsUrl = "https://guarded-gorge-91889.herokuapp.com/api/v1/news/getAll";
+    private static String newsUrl = "https://guarded-gorge-91889.herokuapp.com/api/v1/news/getAllNews";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +44,14 @@ public class MainActivity extends AppCompatActivity {
         context = this;
         recyclerView = findViewById(R.id.main_rv);
         progressBar = findViewById(R.id.main_progress);
+        listOfAgents = findViewById(R.id.list_of_agents_rv);
 
         new DownloadNewsAsyncTask().execute(newsUrl);
+
+        listOfAgents.setAdapter(new ListOfAgentsAdapter(agentRepository.getAgents()));
+        listOfAgents.setLayoutManager(
+                new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+        );
 
         recyclerView.setAdapter(
                 new MainActivityAdapter(newsRepository.getAllProducts())
@@ -66,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                             RequestBuilder.loadAllNewsRequest(url, newsRepository)
                     );
 
-            while (!newsRequest.hasHadResponseDelivered()) {
+            while (!newsRequest.hasHadResponseDelivered() && !newsRequest.isCanceled()) {
 
             }
 

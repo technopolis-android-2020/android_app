@@ -47,7 +47,8 @@ public class RequestBuilder {
                                 object.getString("logo"),
                                 object.getString("body"),
                                 object.getString("url"),
-                                object.getString("date")
+                                object.getString("date"),
+                                object.getString("agent")
                         )
                 );
             } catch (JSONException e) {
