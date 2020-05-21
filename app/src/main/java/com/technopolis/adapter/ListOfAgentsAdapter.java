@@ -17,8 +17,8 @@ public class ListOfAgentsAdapter extends RecyclerView.Adapter<ListOfAgentsAdapte
 
     private List<Agent> agents;
 
-    public ListOfAgentsAdapter(List<Agent> agents) {
-        this.agents = agents;
+    public ListOfAgentsAdapter() {
+
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -52,5 +52,9 @@ public class ListOfAgentsAdapter extends RecyclerView.Adapter<ListOfAgentsAdapte
     @Override
     public int getItemCount() {
         return agents.size();
+    }
+
+    public void updateAdapter(List<Agent> agents) {
+        this.agents = agents;
     }
 }

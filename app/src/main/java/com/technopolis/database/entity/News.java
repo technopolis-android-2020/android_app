@@ -91,7 +91,7 @@ public class News {
         return agentId;
     }
 
-    public void setAgent_id(int agentId) {
+    public void setAgentId(int agentId) {
         this.agentId = agentId;
     }
 

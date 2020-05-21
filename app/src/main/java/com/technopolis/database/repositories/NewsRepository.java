@@ -2,9 +2,6 @@ package com.technopolis.database.repositories;
 
 import android.content.Context;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 import com.technopolis.database.AppDatabase;
 import com.technopolis.database.dao.AgentDao;
 import com.technopolis.database.dao.NewsDao;
@@ -19,8 +16,6 @@ import io.reactivex.Observable;
 
 public class NewsRepository{
 
-    private final MutableLiveData<List<News>> searchResults = new MutableLiveData<>();
-    private LiveData<List<News>> allProducts;
     private NewsDao newsDao;
     private AgentDao agentDao;
 
@@ -28,23 +23,18 @@ public class NewsRepository{
         AppDatabase db = AppDatabase.getInstance(context);
         newsDao = db.newsDao();
         agentDao = db.agentDao();
-        //allProducts = newsDao.getAll();
     }
 
     private News convertNews(final NewsResponse newsResponse){
-        return new News(newsResponse.id, newsResponse.title, newsResponse.logo,
+        Agent agent;
+        News news = new News(newsResponse.id, newsResponse.title, newsResponse.logo,
                 newsResponse.body, newsResponse.url, newsResponse.date, newsResponse.agent);
-        /*
-        todo
 
-         News news = params[0];
-            Agent agent;
-            if ( (agent = agentDao.getAgent(news.getAgentName())) != null) {
-                news.setAgent_id(agent.id);
-                asyncTaskDao.insertNews(news);
-            }
+        if ( (agent = agentDao.getAgent(news.getAgentName())) != null) {
+            news.setAgentId(agent.id);
+        }
 
-         */
+        return news;
     }
 
     public void insertNews(final NewsResponse newsResponse) {

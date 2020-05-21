@@ -1,7 +1,6 @@
 package com.technopolis.activity;
 
 import android.os.Bundle;
-import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView listOfAgents;
     final CompositeDisposable compositeDisposable = new CompositeDisposable();
     final NewsAdapter adapter = new NewsAdapter();
+    final ListOfAgentsAdapter listOfAgentsAdapter = new ListOfAgentsAdapter();
     @Inject
     HttpClient httpClient;
     @Inject
@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
         listOfAgents.setLayoutManager(
                 new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         );
-        listOfAgents.setAdapter(new ListOfAgentsAdapter(agentRepository.getAgents()));
 
         fetchData();
     }
@@ -66,16 +65,13 @@ public class MainActivity extends AppCompatActivity {
         compositeDisposable.add(httpClient.getNewsResponse()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<NewsResponse>>() {
-                    @Override
-                    public void accept(List<NewsResponse> newsResponses) throws Exception {
-                        displayData(newsResponses);
-                    }
-                }));
+                .subscribe(this::displayData));
     }
 
     private void displayData(List<NewsResponse> newsResponses) {
         adapter.updateAdapter(newsResponses);
+        listOfAgentsAdapter.updateAdapter(agentRepository.getAgents());
         recyclerView.setAdapter(adapter);
+        listOfAgents.setAdapter(listOfAgentsAdapter);
     }
 }

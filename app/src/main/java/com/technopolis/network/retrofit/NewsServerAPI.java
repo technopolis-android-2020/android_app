@@ -8,6 +8,6 @@ import io.reactivex.Observable;
 import retrofit2.http.GET;
 
 public interface NewsServerAPI {
-    @GET("api/v1/news/getAll")
+    @GET("api/v1/news/getAllNews")
     Observable<List<NewsResponse>> getNews();
 }
