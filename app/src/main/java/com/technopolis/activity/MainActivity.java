@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.technopolis.App;
 import com.technopolis.R;
 import com.technopolis.adapter.NewsAdapter;
-import com.technopolis.database.repositories.NewsRepository;
 import com.technopolis.network.model.NewsResponse;
 import com.technopolis.network.retrofit.HttpClient;
 
@@ -35,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ((App) getApplication()).getAppComponent().inject(this);
-        
+
         //view
         recyclerView = findViewById(R.id.main_rv);
         recyclerView.setHasFixedSize(true);
