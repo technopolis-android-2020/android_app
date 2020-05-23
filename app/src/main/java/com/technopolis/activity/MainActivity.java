@@ -1,10 +1,12 @@
 package com.technopolis.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.technopolis.App;
 import com.technopolis.R;
@@ -20,11 +22,12 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private RecyclerView recyclerView;
     private RecyclerView listOfAgents;
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     HttpClient httpClient;
     @Inject
     AgentRepository agentRepository;
+    private SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,15 +46,24 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ((App) getApplication()).getAppComponent().inject(this);
 
-
         //view
         recyclerView = findViewById(R.id.main_rv);
         listOfAgents = findViewById(R.id.list_of_agents_rv);
+        swipeContainer = findViewById(R.id.swipeContainer);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         listOfAgents.setLayoutManager(
                 new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         );
+
+        // refresh list
+        swipeContainer.setOnRefreshListener(this::fetchData);
+
+        // configure refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
         fetchData();
     }
@@ -66,6 +79,10 @@ public class MainActivity extends AppCompatActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::displayData));
+
+        swipeContainer.setRefreshing(false);
+        Log.d(LOG_TAG, "News are updated!");
+
     }
 
     private void displayData(List<NewsResponse> newsResponses) {
