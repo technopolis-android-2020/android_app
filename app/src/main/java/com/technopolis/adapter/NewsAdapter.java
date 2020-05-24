@@ -45,7 +45,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         holder.textContent.setText(new StringBuilder(newsList.get(position).body.
                 substring(0, 15)));
         holder.textAgent.setText(newsList.get(position).agent);
-        Glide.with(holder.newsImage.getContext())
+        Glide.with(holder.itemView)
                 .load(Uri.parse(newsList.get(position).logo))
                 .into(holder.newsImage);
     }
