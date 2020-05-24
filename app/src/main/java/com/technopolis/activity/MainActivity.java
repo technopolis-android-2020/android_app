@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        fetchDate();
+        fetchData();
     }
 
     private Long getLatestDate() {
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         return result == null ? 0 : result;
     }
 
-    private void fetchDate() {
+    private void fetchData() {
         compositeDisposable.addAll(
                 newsRepository.getAllNews()
                         .subscribeOn(Schedulers.io())
