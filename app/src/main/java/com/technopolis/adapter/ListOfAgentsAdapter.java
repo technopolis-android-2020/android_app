@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.technopolis.R;
 import com.technopolis.database.entity.Agent;
+import com.technopolis.network.model.AgentsResponse;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ListOfAgentsAdapter extends RecyclerView.Adapter<ListOfAgentsAdapter.ViewHolder> {
 
-    private List<Agent> agents;
+    private List<AgentsResponse> agents;
 
     public ListOfAgentsAdapter() {
 
@@ -29,8 +30,8 @@ public class ListOfAgentsAdapter extends RecyclerView.Adapter<ListOfAgentsAdapte
             textView = itemView.findViewById(R.id.list_of_agents_item_tv);
         }
 
-        public void bind(Agent agent) {
-            this.textView.setText(agent.name);
+        public void bind(AgentsResponse agent) {
+            this.textView.setText(agent.title);
         }
     }
 
@@ -54,7 +55,7 @@ public class ListOfAgentsAdapter extends RecyclerView.Adapter<ListOfAgentsAdapte
         return agents.size();
     }
 
-    public void updateAdapter(List<Agent> agents) {
+    public void updateAdapter(List<AgentsResponse> agents) {
         this.agents = agents;
     }
 }
