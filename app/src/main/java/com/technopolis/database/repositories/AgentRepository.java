@@ -38,4 +38,11 @@ public class AgentRepository {
         agentDao.insert(agent);
     }
 
+    public boolean getIsShown(@NonNull final String name) {
+        return agentDao.getIsShown(name);
+    }
+
+    public void setIsShown(@NonNull final String name, boolean isShown) {
+        agentDao.setIsShown(name, isShown);
+    }
 }

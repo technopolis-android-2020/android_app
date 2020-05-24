@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">News Alligator</string>
+    <string name="prefCategory">Agents</string>
+    <string name="settings">settings</string>
 </resources>
