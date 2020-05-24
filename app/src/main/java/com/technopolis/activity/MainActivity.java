@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     final CompositeDisposable compositeDisposable = new CompositeDisposable();
     final MainActivityAdapter adapterMain = new MainActivityAdapter();
-    final NewsAdapter newsAdapter = new NewsAdapter();
     @Inject
     NewsRepository newsRepository;
     @Inject
