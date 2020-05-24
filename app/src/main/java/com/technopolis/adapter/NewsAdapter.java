@@ -41,13 +41,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
     @Override
     public void onBindViewHolder(NewsViewHolder holder, int position) {
-        holder.textTitle.setText(newsList.get(position).title);
-        holder.textContent.setText(new StringBuilder(newsList.get(position).body.
-                substring(0, 15)));
-        holder.textAgent.setText(newsList.get(position).agent);
-        Glide.with(holder.itemView)
-                .load(Uri.parse(newsList.get(position).logo))
-                .into(holder.newsImage);
+        holder.bind(newsList.get(position));
     }
 
     @Override
@@ -56,18 +50,27 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     }
 
 
-    public static class NewsViewHolder extends RecyclerView.ViewHolder {
+    static class NewsViewHolder extends RecyclerView.ViewHolder {
         TextView textTitle;
         TextView textContent;
         TextView textAgent;
         ImageView newsImage;
 
-        public NewsViewHolder(View view) {
+        NewsViewHolder(View view) {
             super(view);
             textTitle = view.findViewById(R.id.txt_title);
             textContent = view.findViewById(R.id.txt_content);
             textAgent = view.findViewById(R.id.txt_agent);
             newsImage = view.findViewById(R.id.rec_item_image_view);
+        }
+
+        void bind(NewsResponse newsResponse) {
+            this.textTitle.setText(newsResponse.title);
+            this.textContent.setText(newsResponse.body.substring(0, 15));
+            this.textAgent.setText(newsResponse.agent);
+            Glide.with(this.newsImage.getContext())
+                    .load(Uri.parse(newsResponse.logo))
+                    .into(this.newsImage);
         }
     }
 }

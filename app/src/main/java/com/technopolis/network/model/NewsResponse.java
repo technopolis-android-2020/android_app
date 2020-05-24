@@ -9,8 +9,7 @@ public class NewsResponse {
     public String body;
     public String url;
 
-    public NewsResponse() {
-    }
+    public NewsResponse() { }
 
     public NewsResponse(String date, String agent, String logo, int id, String title, String body, String url) {
         this.date = date;

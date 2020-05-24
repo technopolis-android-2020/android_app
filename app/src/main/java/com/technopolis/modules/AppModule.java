@@ -2,6 +2,8 @@ package com.technopolis.modules;
 
 import android.content.Context;
 
+import com.technopolis.database.repositories.AgentRepository;
+import com.technopolis.database.repositories.AgentWithNewsRepository;
 import com.technopolis.database.repositories.NewsRepository;
 import com.technopolis.network.retrofit.HttpClient;
 
@@ -29,6 +31,18 @@ public class AppModule {
     @Singleton
     HttpClient provideHttpClient() {
         return new HttpClient();
+    }
+
+    @Provides
+    @Singleton
+    AgentRepository provideAgentRepository(Context context) {
+        return new AgentRepository(context);
+    }
+
+    @Provides
+    @Singleton
+    AgentWithNewsRepository provideAgentWithNewsRepository(Context context) {
+        return new AgentWithNewsRepository(context);
     }
 
     @Provides
