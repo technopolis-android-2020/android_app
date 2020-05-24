@@ -9,9 +9,13 @@ import androidx.room.Insert;
 import androidx.room.Query;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 @Dao
 public interface NewsDao {
+
+    @Query("SELECT MAX(publication_date) FROM news")
+    Long getLatestDate();
 
     @Query("SELECT * FROM news")
     Observable<List<News>> getAll();

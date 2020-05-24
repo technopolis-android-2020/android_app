@@ -9,8 +9,8 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "news")
 public class News {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @PrimaryKey
+    private long id;
 
     @ColumnInfo(name = "title")
     @NonNull
@@ -42,11 +42,11 @@ public class News {
     }
 
     @ColumnInfo(name = "publication_date")
-    private String publicationDate;
+    private Long publicationDate;
 
-    public News(final int id, @NonNull final String title,
+    public News(final long id, @NonNull final String title,
                 @NonNull final String previewImgUrl, @NonNull final String body,
-                @NonNull final String url, final String publicationDate,
+                @NonNull final String url, final Long publicationDate,
                 @NonNull final String agent) {
         this.id = id;
         this.title = title;
@@ -60,7 +60,7 @@ public class News {
     @Ignore
     public News(@NonNull final String title, @NonNull final String previewImgUrl,
                 @NonNull final String body, @NonNull final String url,
-                final String publicationDate) {
+                final Long publicationDate) {
         this.title = title;
         this.previewImgUrl = previewImgUrl;
         this.body = body;
@@ -68,11 +68,11 @@ public class News {
         this.publicationDate = publicationDate;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -112,11 +112,11 @@ public class News {
         this.url = url;
     }
 
-    public String getPublicationDate() {
+    public Long getPublicationDate() {
         return publicationDate;
     }
 
-    public void setPublicationDate(String publicationDate) {
+    public void setPublicationDate(Long publicationDate) {
         this.publicationDate = publicationDate;
     }
 }

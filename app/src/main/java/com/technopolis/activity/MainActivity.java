@@ -8,8 +8,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.technopolis.App;
 import com.technopolis.R;
+import com.technopolis.adapter.MainActivityAdapter;
 import com.technopolis.adapter.NewsAdapter;
-import com.technopolis.network.model.NewsResponse;
+import com.technopolis.database.entity.News;
+import com.technopolis.database.repositories.NewsRepository;
 import com.technopolis.network.retrofit.HttpClient;
 
 import java.util.List;
@@ -18,7 +20,6 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -26,7 +27,10 @@ public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     final CompositeDisposable compositeDisposable = new CompositeDisposable();
-    final NewsAdapter adapter = new NewsAdapter();
+    final MainActivityAdapter adapterMain = new MainActivityAdapter();
+    final NewsAdapter newsAdapter = new NewsAdapter();
+    @Inject
+    NewsRepository newsRepository;
     @Inject
     HttpClient httpClient;
 
@@ -42,30 +46,38 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        fetchDate();
+    }
 
-        fetchData();
+    private Long getLatestDate() {
+        Long result = newsRepository.getLatestDate();
+        return result == null ? 0 : result;
+    }
+
+    private void fetchDate() {
+        compositeDisposable.addAll(
+                newsRepository.getAllNews()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::displayDBData),
+                httpClient.getNewsByDate(getLatestDate())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(listNews -> newsRepository.insertAllNews(listNews)),
+                newsRepository.getAllNews()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::displayDBData)
+        );
+    }
+
+    private void displayDBData(List<News> newsList) {
+        adapterMain.updateAdapter(newsList);
+        recyclerView.setAdapter(adapterMain);
     }
 
     @Override
     protected void onDestroy() {
         compositeDisposable.clear();
         super.onDestroy();
-    }
-
-    private void fetchData() {
-        compositeDisposable.add(httpClient.getNewsResponse()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<NewsResponse>>() {
-                    @Override
-                    public void accept(List<NewsResponse> newsResponses) throws Exception {
-                        displayData(newsResponses);
-                    }
-                }));
-    }
-
-    private void displayData(List<NewsResponse> newsResponses) {
-        adapter.updateAdapter(newsResponses);
-        recyclerView.setAdapter(adapter);
     }
 }

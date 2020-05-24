@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 public class NewsRepository{
 
@@ -29,6 +30,10 @@ public class NewsRepository{
     private News convertNews(final NewsResponse newsResponse){
         return new News(newsResponse.id, newsResponse.title, newsResponse.logo,
                 newsResponse.body, newsResponse.url, newsResponse.date, newsResponse.agent);
+    }
+
+    public Long getLatestDate() {
+        return newsDao.getLatestDate();
     }
 
     public void insertNews(final NewsResponse newsResponse) {

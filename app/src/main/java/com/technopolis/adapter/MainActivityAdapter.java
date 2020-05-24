@@ -1,56 +1,66 @@
-/*
 package com.technopolis.adapter;
 
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.view.LayoutInflater;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.technopolis.R;
+import com.technopolis.activity.MainActivity;
 import com.technopolis.database.entity.News;
+import com.technopolis.network.model.NewsResponse;
 
 import java.util.List;
 
-import androidx.recyclerview.widget.RecyclerView;
+/*
+ * Этот адаптер для работы с сервером, временная мера
+ */
+public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.NewsViewHolder> {
 
-public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.MyViewHolder>  {
-    private List<News> mDataset;
+    private List<News> newsList;
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView textView;
-
-        public MyViewHolder(View view) {
-            super(view);
-            textView = view.findViewById(R.id.rec_item_text_view);
-        }
-
-        public void bind(News news) {
-            textView.setText(news.getTitle());
-        }
+    public MainActivityAdapter() {
     }
 
-    public MainActivityAdapter(List<News> mDataset) {
-        this.mDataset = mDataset;
+    public void updateAdapter(List<News> newsList) {
+        this.newsList = newsList;
     }
 
     @Override
-    public MainActivityAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater
-                .from(parent.getContext())
+    public MainActivityAdapter.NewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recycler_item, parent, false);
 
-        return new MyViewHolder(view);
+        return new NewsViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.bind(mDataset.get(position));
+    public void onBindViewHolder(NewsViewHolder holder, int position) {
+        holder.textTitle.setText(newsList.get(position).getTitle());
+        holder.textContent.setText(new StringBuilder(newsList.get(position).getBody().
+                substring(0, 15)));
+        holder.textAgent.setText(newsList.get(position).getAgent());
     }
 
     @Override
     public int getItemCount() {
-        return mDataset.size();
+        return newsList.size();
     }
 
+
+    public static class NewsViewHolder extends RecyclerView.ViewHolder {
+        TextView textTitle;
+        TextView textContent;
+        TextView textAgent;
+
+        public NewsViewHolder(View view) {
+            super(view);
+            textTitle = view.findViewById(R.id.txt_title);
+            textContent = view.findViewById(R.id.txt_content);
+            textAgent = view.findViewById(R.id.txt_agent);
+        }
+    }
 }
-*/
