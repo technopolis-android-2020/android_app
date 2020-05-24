@@ -2,6 +2,7 @@ package com.technopolis.network.retrofit;
 
 import androidx.annotation.NonNull;
 
+import com.technopolis.network.model.AgentsResponse;
 import com.technopolis.network.model.NewsResponse;
 
 import java.util.List;
@@ -26,5 +27,10 @@ public class HttpClient {
     @NonNull
     public Observable<List<NewsResponse>> getNewsResponse() {
         return newsServerAPI.getNews();
+    }
+
+    @NonNull
+    public Observable<List<AgentsResponse>> getAgentsResponse() {
+        return newsServerAPI.getAgents();
     }
 }
