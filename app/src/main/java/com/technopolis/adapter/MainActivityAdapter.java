@@ -3,29 +3,35 @@ package com.technopolis.adapter;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.LayoutInflater;
 
+import com.bumptech.glide.Glide;
 import com.technopolis.R;
 import com.technopolis.database.entity.News;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.MyViewHolder>  {
     private List<News> mDataset;
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView textView;
+    static class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView textView;
+        ImageView imageView;
 
-        public MyViewHolder(View view) {
+        MyViewHolder(View view) {
             super(view);
             textView = view.findViewById(R.id.rec_item_text_view);
+            imageView = view.findViewById(R.id.rec_item_image_view);
         }
 
-        public void bind(News news) {
+        void bind(News news) {
             textView.setText(news.getTitle());
+            Glide.with(imageView.getContext()).load(news.getPreviewImgUrl()).into(imageView);
         }
     }
 
@@ -33,6 +39,7 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
         this.mDataset = mDataset;
     }
 
+    @NonNull
     @Override
     public MainActivityAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater
