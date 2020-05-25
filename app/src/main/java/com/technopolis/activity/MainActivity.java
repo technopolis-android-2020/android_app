@@ -20,6 +20,7 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -55,18 +56,19 @@ public class MainActivity extends AppCompatActivity {
 
     private void fetchData() {
         compositeDisposable.addAll(
-                newsRepository.getAllNews()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::displayDBData),
+                drawNews(),
                 httpClient.getNewsByDate(getLatestDate())
                         .subscribeOn(Schedulers.io())
                         .subscribe(listNews -> newsRepository.insertAllNews(listNews)),
-                newsRepository.getAllNews()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::displayDBData)
+                drawNews()
         );
+    }
+
+    private Disposable drawNews() {
+        return newsRepository.getAllNews()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::displayDBData);
     }
 
     private void displayDBData(List<News> newsList) {
