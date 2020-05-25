@@ -3,6 +3,6 @@
 
     <PreferenceCategory
         android:key="prefCategory"
-        android:title="Agents"/>
+        android:title="                               AGENTS                                      "/>
 
 </PreferenceScreen>
