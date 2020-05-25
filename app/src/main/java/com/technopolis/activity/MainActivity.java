@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.technopolis.App;
 import com.technopolis.R;
 import com.technopolis.adapter.MainActivityAdapter;
-import com.technopolis.adapter.NewsAdapter;
 import com.technopolis.database.entity.News;
 import com.technopolis.database.repositories.NewsRepository;
 import com.technopolis.network.retrofit.HttpClient;
@@ -55,13 +54,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchData() {
-        compositeDisposable.addAll(
-                drawNews(),
+        compositeDisposable.add(drawNews());
+        compositeDisposable.add(
                 httpClient.getNewsByDate(getLatestDate())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(listNews -> newsRepository.insertAllNews(listNews)),
-                drawNews()
-        );
+                .doOnNext(listNews -> newsRepository.insertAllNews(listNews))
+                .flatMap(newsResponses -> newsRepository.getAllNews())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::displayDBData));
     }
 
     private Disposable drawNews() {
