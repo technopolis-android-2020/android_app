@@ -4,6 +4,7 @@ import com.technopolis.database.entity.Agent;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -22,4 +23,11 @@ public interface AgentDao {
 
     @Insert
     void insert(Agent agent);
+
+    @Query("SELECT is_shown from agent WHERE name = :name")
+    boolean getIsShown(@NonNull final String name);
+
+    @Query("UPDATE agent SET is_shown = :isShown WHERE name = :name")
+    void setIsShown(@NonNull final String name, boolean isShown);
+
 }

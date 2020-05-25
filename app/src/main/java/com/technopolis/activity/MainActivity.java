@@ -1,8 +1,13 @@
 package com.technopolis.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,8 +32,8 @@ import io.reactivex.schedulers.Schedulers;
 
 
 public class MainActivity extends AppCompatActivity {
-
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final int settingsActivityRequestCode = 1;
 
     private RecyclerView recyclerView;
     private RecyclerView listOfAgents;
@@ -99,5 +104,37 @@ public class MainActivity extends AppCompatActivity {
     private void displayAgents(List<AgentsResponse> agentsResponses) {
         listOfAgentsAdapter.updateAdapter(agentsResponses);
         listOfAgents.setAdapter(listOfAgentsAdapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.settings) {
+
+            Intent openSettings = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivityForResult(openSettings, settingsActivityRequestCode);
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (settingsActivityRequestCode) {
+            case RESULT_CANCELED:
+                // nastroiki menyalis'
+                break;
+            case RESULT_OK:
+                // nastroiki ne menyalis'
+                break;
+        }
     }
 }
