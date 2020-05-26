@@ -20,4 +20,8 @@ public class AgentWithNewsRepository {
     public List<AgentWithNews> loadAgentWithNews() {
         return agentWithNewsDao.loadAgentWithNews();
     }
+
+    public List<AgentWithNews> loadShownAgentWithNews() {
+        return agentWithNewsDao.loadShownAgentWithNews();
+    }
 }
