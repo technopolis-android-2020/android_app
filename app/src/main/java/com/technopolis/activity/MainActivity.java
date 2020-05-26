@@ -18,6 +18,7 @@ import com.technopolis.R;
 import com.technopolis.adapter.ListOfAgentsAdapter;
 import com.technopolis.adapter.NewsAdapter;
 import com.technopolis.database.repositories.AgentRepository;
+import com.technopolis.fragments.SettingsFragment;
 import com.technopolis.network.model.AgentsResponse;
 import com.technopolis.network.model.NewsResponse;
 import com.technopolis.network.retrofit.HttpClient;
@@ -116,25 +117,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.settings) {
-
-            Intent openSettings = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivityForResult(openSettings, settingsActivityRequestCode);
-
+            placeSettingFragment();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (settingsActivityRequestCode) {
-            case RESULT_CANCELED:
-                // nastroiki menyalis'
-                break;
-            case RESULT_OK:
-                // nastroiki ne menyalis'
-                break;
-        }
+    private void placeSettingFragment() {
+        getFragmentManager()
+                .beginTransaction()
+                .replace(android.R.id.content, new SettingsFragment())
+                .addToBackStack("placeSettingsFragment")
+                .commit();
     }
+
 }
