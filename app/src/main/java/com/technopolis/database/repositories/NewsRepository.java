@@ -25,6 +25,10 @@ public class NewsRepository{
         agentDao = db.agentDao();
     }
 
+    public Long getLatestDate() {
+        return newsDao.getLatestDate();
+    }
+
     private News convertNews(final NewsResponse newsResponse){
         Agent agent;
         News news = new News(newsResponse.id, newsResponse.title, newsResponse.logo,

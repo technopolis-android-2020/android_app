@@ -13,6 +13,9 @@ import io.reactivex.Observable;
 @Dao
 public interface NewsDao {
 
+    @Query("SELECT MAX(publication_date) FROM news")
+    Long getLatestDate();
+
     @Query("SELECT * FROM news")
     Observable<List<News>> getAll();
 
