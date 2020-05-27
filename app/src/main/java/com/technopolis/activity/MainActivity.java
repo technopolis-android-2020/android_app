@@ -105,29 +105,28 @@ public class MainActivity extends AppCompatActivity {
     private void fetchDataFromServer() {
         Single<Boolean> checkInternetConnection = ReactiveNetwork.checkInternetConnectivity();
 
-        compositeDisposable.add(
-                checkInternetConnection
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(isConnectedToInternet -> {
-                            if (isConnectedToInternet) {
-                                compositeDisposable.add(
-                                        httpClient.getAgentsResponse()
-                                                //запрос агентов с сервера, добавление их в бд и отрисовка из бд
-                                                .doOnNext(agentsResponses -> agentRepository.insertAgents(agentsResponses))
-                                                .flatMap(agent -> agentRepository.getAgents())
-                                                .doOnNext(this::preDisplayAgent)
-                                                //запрос новостей с сервера, добавление их в бд и отрисовка из бд
-                                                .flatMap(newsResponse -> httpClient.getNewsByDate(getLatestDate()))
-                                                .doOnNext(listNews -> newsRepository.insertAllNews(listNews))
-                                                .flatMap(news -> newsRepository.getAllNews())
-                                                .subscribeOn(Schedulers.io())
-                                                .observeOn(AndroidSchedulers.mainThread())
-                                                .subscribe(this::displayNews));
-                                Log.d(LOG_TAG, "News are updated!");
-                            } else {
-                                Log.d(LOG_TAG, "No internet connection");
-                            }
-                        }));
+        compositeDisposable.add(checkInternetConnection
+                .subscribeOn(Schedulers.io())
+                .subscribe(isConnectedToInternet -> {
+                    if (isConnectedToInternet) {
+                        compositeDisposable.add(
+                                httpClient.getAgentsResponse()
+                                        //запрос агентов с сервера, добавление их в бд и отрисовка из бд
+                                        .doOnNext(agentsResponses -> agentRepository.insertAgents(agentsResponses))
+                                        .flatMap(agent -> agentRepository.getAgents())
+                                        .doOnNext(this::preDisplayAgent)
+                                        //запрос новостей с сервера, добавление их в бд и отрисовка из бд
+                                        .flatMap(newsResponse -> httpClient.getNewsByDate(getLatestDate()))
+                                        .doOnNext(listNews -> newsRepository.insertAllNews(listNews))
+                                        .flatMap(news -> newsRepository.getAllNews())
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(this::displayNews));
+                        Log.d(LOG_TAG, "News are updated!");
+                    } else {
+                        Log.d(LOG_TAG, "No internet connection");
+                    }
+                }));
         swipeContainer.setRefreshing(false);
     }
 
