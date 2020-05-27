@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.technopolis.R;
-import com.technopolis.network.model.NewsResponse;
+import com.technopolis.database.entity.News;
 
 import java.util.List;
 
@@ -21,12 +21,12 @@ import java.util.List;
  */
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
 
-    private List<NewsResponse> newsList;
+    private List<News> newsList;
 
     public NewsAdapter() {
     }
 
-    public void updateAdapter(List<NewsResponse> newsList) {
+    public void updateAdapter(List<News> newsList) {
         this.newsList = newsList;
     }
 
@@ -64,12 +64,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             newsImage = view.findViewById(R.id.rec_item_image_view);
         }
 
-        void bind(NewsResponse newsResponse) {
-            this.textTitle.setText(newsResponse.title);
-            this.textContent.setText(newsResponse.body.substring(0, 15));
-            this.textAgent.setText(newsResponse.agent);
+        void bind(News news) {
+            this.textTitle.setText(news.getTitle());
+            this.textContent.setText(news.getBody().substring(0, 15));
+            this.textAgent.setText(news.getAgentName());
             Glide.with(this.newsImage.getContext())
-                    .load(Uri.parse(newsResponse.logo))
+                    .load(Uri.parse(news.getPreviewImgUrl()))
                     .into(this.newsImage);
         }
     }

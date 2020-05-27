@@ -17,15 +17,17 @@ import com.technopolis.App;
 import com.technopolis.R;
 import com.technopolis.adapter.ListOfAgentsAdapter;
 import com.technopolis.adapter.NewsAdapter;
+import com.technopolis.database.entity.Agent;
+import com.technopolis.database.entity.News;
 import com.technopolis.database.repositories.AgentRepository;
-import com.technopolis.network.model.AgentsResponse;
-import com.technopolis.network.model.NewsResponse;
+import com.technopolis.database.repositories.NewsRepository;
 import com.technopolis.network.retrofit.HttpClient;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -44,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     HttpClient httpClient;
     @Inject
     AgentRepository agentRepository;
+    @Inject
+    NewsRepository newsRepository;
     private SwipeRefreshLayout swipeContainer;
 
     @Override
@@ -81,28 +85,54 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchData() {
-        compositeDisposable.addAll(
-                httpClient.getNewsResponse()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::displayNews),
+        compositeDisposable.add(
+                //рисуем агентов из бд
+                /*agentRepository.getAgents()
+                .doOnNext(this::preDisplayAgent)
+                //рисуем новости из бд
+                .flatMap(news -> newsRepository.getAllNews())
+                .doOnNext(news -> compositeDisposable.add(Observable.fromArray(news)
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(this::displayNews)))*/
+                //запрос агентов с сервера, добавление их в бд и отрисовка из бд
                 httpClient.getAgentsResponse()
+                        .doOnNext(agentsResponses -> agentRepository.insertAgents(agentsResponses))
+                        .flatMap(agent -> agentRepository.getAgents())
+                        .doOnNext(this::preDisplayAgent)
+                        //запрос новостей с сервера, добавление их в бд и отрисовка из бд
+                        .flatMap(newsResponse -> httpClient.getNewsByDate(getLatestDate()))
+                        .doOnNext(listNews -> newsRepository.insertAllNews(listNews))
+                        .flatMap(news -> newsRepository.getAllNews())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::displayAgents)
-        );
+                        .subscribe(this::displayNews));
 
         swipeContainer.setRefreshing(false);
         Log.d(LOG_TAG, "News are updated!");
     }
 
-    private void displayNews(List<NewsResponse> newsResponses) {
-        adapter.updateAdapter(newsResponses);
+    private void preDisplayAgent(List<Agent> agents) {
+        compositeDisposable.add(Observable.fromArray(agents)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::displayAgents));
+    }
+
+    private int getMaxAgentId() {
+        return agentRepository.getMaxAgentId();
+    }
+
+    private Long getLatestDate() {
+        Long result = newsRepository.getLatestDate();
+        return result == null ? 0 : result;
+    }
+
+    private void displayNews(List<News> news) {
+        adapter.updateAdapter(news);
         recyclerView.setAdapter(adapter);
     }
 
-    private void displayAgents(List<AgentsResponse> agentsResponses) {
-        listOfAgentsAdapter.updateAdapter(agentsResponses);
+    private void displayAgents(List<Agent> agents) {
+        listOfAgentsAdapter.updateAdapter(agents);
         listOfAgents.setAdapter(listOfAgentsAdapter);
     }
 

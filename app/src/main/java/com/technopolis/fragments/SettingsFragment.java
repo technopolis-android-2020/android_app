@@ -1,17 +1,19 @@
 package com.technopolis.fragments;
 
-import androidx.preference.Preference;
+import android.os.Bundle;
+
 import androidx.preference.PreferenceFragment;
 import androidx.preference.PreferenceGroup;
-
-import android.os.Bundle;
 import androidx.preference.SwitchPreference;
 
 import com.technopolis.App;
 import com.technopolis.R;
-import com.technopolis.database.entity.Agent;
 import com.technopolis.database.repositories.AgentRepository;
+
 import javax.inject.Inject;
+
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 
 public class SettingsFragment extends PreferenceFragment {
     @Inject
@@ -24,23 +26,21 @@ public class SettingsFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.preference);
         PreferenceGroup preferenceGroup = (PreferenceGroup) findPreference("prefCategory");
 
-        for (Agent agent : agentRepository.getAgents()) {
-            SwitchPreference switchPreference = new SwitchPreference(getActivity());
-            switchPreference.setTitle(agent.name);
-            switchPreference.setDefaultValue(agent.isShown);
+        Disposable disposable = (Disposable) agentRepository.getAgents()
+                .flatMap(Observable::fromIterable)
+                .doOnNext(agent -> {
+                    SwitchPreference switchPreference = new SwitchPreference(getActivity());
+                    switchPreference.setTitle(agent.name);
+                    switchPreference.setDefaultValue(agent.isShown);
 
-            switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    agentRepository.setIsShown((String) preference.getTitle(), (boolean) newValue);
-                    return true;
-                }
-            });
+                    switchPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                        agentRepository.setIsShown((String) preference.getTitle(), (boolean) newValue);
+                        return true;
+                    });
 
-            preferenceGroup.addPreference(switchPreference);
-
-        }
-
+                    preferenceGroup.addPreference(switchPreference);
+                });
+        disposable.dispose();
     }
 
 }

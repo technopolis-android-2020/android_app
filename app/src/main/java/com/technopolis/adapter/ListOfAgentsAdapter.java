@@ -7,19 +7,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.technopolis.R;
-import com.technopolis.database.entity.Agent;
-import com.technopolis.network.model.AgentsResponse;
-
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.technopolis.R;
+import com.technopolis.database.entity.Agent;
+
+import java.util.List;
+
 public class ListOfAgentsAdapter extends RecyclerView.Adapter<ListOfAgentsAdapter.ViewHolder> {
 
-    private List<AgentsResponse> agents;
+    private List<Agent> agents;
 
     public ListOfAgentsAdapter() {
 
@@ -35,10 +34,10 @@ public class ListOfAgentsAdapter extends RecyclerView.Adapter<ListOfAgentsAdapte
             imageView = itemView.findViewById((R.id.list_of_agents_item_iv));
         }
 
-        public void bind(AgentsResponse agent) {
-            this.textView.setText(agent.title);
+        public void bind(Agent agent) {
+            this.textView.setText(agent.getName());
             Glide.with(this.imageView.getContext())
-                    .load(Uri.parse(agent.previewImageUrl))
+                    .load(Uri.parse(agent.getPrevImgUrl()))
                     .into(this.imageView);
         }
     }
@@ -63,7 +62,7 @@ public class ListOfAgentsAdapter extends RecyclerView.Adapter<ListOfAgentsAdapte
         return agents.size();
     }
 
-    public void updateAdapter(List<AgentsResponse> agents) {
+    public void updateAdapter(List<Agent> agents) {
         this.agents = agents;
     }
 }
