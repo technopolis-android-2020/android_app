@@ -21,6 +21,9 @@ public interface AgentDao {
     @Query("SELECT * FROM agent")
     Observable<List<Agent>> getAll();
 
+    @Query("SELECT * FROM agent")
+    List<Agent> getAllNotObservable();
+
     @Query("SELECT * FROM agent WHERE name = :name")
     Agent getAgent(String name);
 

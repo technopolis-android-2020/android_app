@@ -23,9 +23,6 @@ import com.technopolis.database.entity.News;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
- * Этот адаптер для работы с сервером, временная мера
- */
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
 
     private List<NewsWithAgent> newsList;
@@ -77,7 +74,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         void bind(NewsWithAgent news) {
             this.textTitle.setText(news.news.getTitle());
             this.textContent.setText(news.news.getBody().substring(0, 15));
-            this.textAgent.setText(news.news.getAgentName());
+            this.textAgent.setText(news.agent.name);
 
             card.setOnClickListener(new OnNewsClickListener(fragmentManager, news));
             Glide.with(this.newsImage.getContext())

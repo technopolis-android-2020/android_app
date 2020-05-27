@@ -39,6 +39,10 @@ public class AgentRepository {
         return agentDao.getAll();
     }
 
+    public List<Agent> getAgentsNotObservable() {
+        return agentDao.getAllNotObservable();
+    }
+
     public void insertAgents(List<AgentsResponse> agents) {
         agentDao.insert(castToAgents(agents));
     }
