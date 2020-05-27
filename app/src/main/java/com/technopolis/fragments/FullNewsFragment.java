@@ -78,7 +78,7 @@ public class FullNewsFragment extends Fragment {
         newsBody.setText(news.getBody());
 
         Glide.with(agentLogo.getContext())
-                .load(Uri.parse(agent.previewImgUrl))
+                .load(Uri.parse(agent.previewImageUrl))
                 .into(agentLogo);
 
         Glide.with(newsImage.getContext())
