@@ -8,12 +8,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.technopolis.R;
+import com.technopolis.database.entity.News;
+import com.technopolis.listener.OnNewsClickListener;
 import com.technopolis.network.model.NewsResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -49,12 +54,13 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         return newsList.size();
     }
 
-
     public static class NewsViewHolder extends RecyclerView.ViewHolder {
+        public static FragmentManager fragmentManager;
         TextView textTitle;
         TextView textContent;
         TextView textAgent;
         ImageView newsImage;
+        CardView card;
 
         public NewsViewHolder(View view) {
             super(view);
@@ -62,12 +68,17 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             textContent = view.findViewById(R.id.txt_content);
             textAgent = view.findViewById(R.id.txt_agent);
             newsImage = view.findViewById(R.id.rec_item_image_view);
+            card = view.findViewById(R.id.card_item);
         }
 
         void bind(NewsResponse newsResponse) {
             this.textTitle.setText(newsResponse.title);
             this.textContent.setText(newsResponse.body.substring(0, 15));
             this.textAgent.setText(newsResponse.agent);
+
+            card.setOnClickListener(new OnNewsClickListener(fragmentManager, new News(newsResponse.id, newsResponse.title,
+                    newsResponse.logo, newsResponse.body, newsResponse.url, newsResponse.date,
+                    newsResponse.agent)));
             Glide.with(this.newsImage.getContext())
                     .load(Uri.parse(newsResponse.logo))
                     .into(this.newsImage);

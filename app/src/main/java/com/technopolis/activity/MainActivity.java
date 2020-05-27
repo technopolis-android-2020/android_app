@@ -61,13 +61,15 @@ public class MainActivity extends AppCompatActivity {
         );
         ListOfAgentsAdapter.ViewHolder.mainActivityFragmentManager = getSupportFragmentManager();
 
+        NewsAdapter.NewsViewHolder.fragmentManager = getSupportFragmentManager();
+
         // refresh list
         swipeContainer.setOnRefreshListener(this::fetchData);
 
         // configure refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
+        swipeContainer.setColorSchemeResources(android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
+                android.R.color.holo_blue_bright,
                 android.R.color.holo_red_light);
 
         fetchData();

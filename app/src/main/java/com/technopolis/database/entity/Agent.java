@@ -28,9 +28,9 @@ public class Agent {
         this(name, "", true);
     }
 
-    public Agent(@NonNull final String name, @NonNull final String previewImageUrl, final boolean isShown) {
+    public Agent(@NonNull final String name, final String previewImgUrl, final boolean isShown) {
         this.name = name;
-        this.previewImageUrl = previewImageUrl;
+        this.previewImgUrl = previewImgUrl;
         this.isShown = isShown;
     }
 }

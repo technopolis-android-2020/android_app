@@ -2,6 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="5dp"
     android:id="@+id/list_of_agents_frame"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -30,6 +32,7 @@
             android:maxLines="1"
             android:ellipsize="end"
             android:singleLine="true"
+            android:layout_marginTop="5dp"
             app:layout_constraintBottom_toBottomOf="@id/list_of_agents_main_frame"
             app:layout_constraintLeft_toLeftOf="@id/list_of_agents_main_frame"
             app:layout_constraintRight_toRightOf="@id/list_of_agents_main_frame"
