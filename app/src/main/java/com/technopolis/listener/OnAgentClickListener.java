@@ -21,11 +21,11 @@ public class OnAgentClickListener implements View.OnClickListener {
         this.fragmentManager = fragmentManager;
         this.agents = agents;
         this.agentPosition = agentPosition;
-        this.storiesRecyclerFragment = new StoriesRecyclerFragment();
     }
 
     @Override
     public void onClick(View v) {
+        storiesRecyclerFragment = new StoriesRecyclerFragment();
         storiesRecyclerFragment.setStartItem(agentPosition);
         storiesRecyclerFragment.setAgents(agents);
         fragmentManager
