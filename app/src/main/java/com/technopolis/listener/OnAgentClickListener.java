@@ -1,35 +1,37 @@
 package com.technopolis.listener;
 
-import androidx.fragment.app.Fragment;
-import android.os.Bundle;
 import android.view.View;
 
 import com.technopolis.database.entity.Agent;
-import com.technopolis.database.repositories.AgentRepository;
 import com.technopolis.fragments.StoriesFragment;
-import com.technopolis.network.model.AgentsResponse;
+import com.technopolis.fragments.StoriesRecyclerFragment;
 
-import androidx.annotation.NonNull;
+import java.util.List;
+
 import androidx.fragment.app.FragmentManager;
 
 public class OnAgentClickListener implements View.OnClickListener {
-    private StoriesFragment storiesFragment;
     private FragmentManager fragmentManager;
-    private Agent agent;
 
-    public OnAgentClickListener(FragmentManager fragmentManager, Agent agent) {
-        this.agent = agent;
+    private List<Agent> agents;
+    private int agentPosition;
+    private StoriesRecyclerFragment storiesRecyclerFragment;
+
+    public OnAgentClickListener(FragmentManager fragmentManager, int agentPosition, List<Agent> agents) {
         this.fragmentManager = fragmentManager;
-        this.storiesFragment = new StoriesFragment();
+        this.agents = agents;
+        this.agentPosition = agentPosition;
+        this.storiesRecyclerFragment = new StoriesRecyclerFragment();
     }
 
     @Override
     public void onClick(View v) {
-        storiesFragment.setAgent(agent);
+        storiesRecyclerFragment.setStartItem(agentPosition);
+        storiesRecyclerFragment.setAgents(agents);
         fragmentManager
                 .beginTransaction()
-                .replace(android.R.id.content, storiesFragment)
-                .addToBackStack("placeStoriesFragment")
+                .replace(android.R.id.content, storiesRecyclerFragment)
+                .addToBackStack(StoriesFragment.BACK_STACK_NAME)
                 .commit();
     }
 

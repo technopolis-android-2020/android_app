@@ -5,13 +5,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.technopolis.App;
 import com.technopolis.R;
-import com.technopolis.activity.MainActivity;
 import com.technopolis.database.entity.Agent;
 import com.technopolis.database.pojo.NewsWithAgent;
 import com.technopolis.database.repositories.NewsRepository;
@@ -21,8 +21,13 @@ import javax.inject.Inject;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 public class StoriesFragment extends Fragment {
+
+    public static final String BACK_STACK_NAME = "placeStoriesFragment";
+
+    StoriesFragment instance;
 
     private NewsWithAgent news;
     private Agent agent;
@@ -35,13 +40,12 @@ public class StoriesFragment extends Fragment {
     private ImageView backgroundImg;
     private TextView newsTitle;
     private TextView newsText;
-    //Bundle bundle;
+    private Button closeButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ((App) getActivity().getApplication()).getAppComponent().injectStoriesFragment(this);
-
-        hideMainActivityActionBar();
+        instance = this;
         news = newsRepository.loadOneLastNews(agent.name);
 
         return inflater.inflate(R.layout.stories_fragment, container, false);
@@ -51,21 +55,8 @@ public class StoriesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         findViews();
+        setListeners();
         fillContent();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        showMainActivityActionBar();
-    }
-
-    private void hideMainActivityActionBar() {
-        ((MainActivity) getActivity()).getSupportActionBar().hide();
-    }
-
-    private void showMainActivityActionBar() {
-        ((MainActivity) getActivity()).getSupportActionBar().show();
     }
 
     private void findViews() {
@@ -75,6 +66,7 @@ public class StoriesFragment extends Fragment {
         backgroundImg = view.findViewById(R.id.stories_fragment_background_img);
         newsTitle = view.findViewById(R.id.stories_fragment_news_title);
         newsText = view.findViewById(R.id.stories_fragment_news_text);
+        closeButton = view.findViewById(R.id.stories_fragment_close_button);
     }
 
     private void fillContent() {
@@ -89,6 +81,12 @@ public class StoriesFragment extends Fragment {
         Glide.with(backgroundImg.getContext())
                 .load(Uri.parse(news.news.getPreviewImgUrl()))
                 .into(backgroundImg);
+    }
+
+    private void setListeners() {
+        closeButton.setOnClickListener(v -> {
+            getParentFragment().getFragmentManager().popBackStackImmediate();
+        });
     }
 
     public void setAgent(Agent agent) {

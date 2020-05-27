@@ -2,4 +2,18 @@
 <resources>
     <dimen name="storiesFragmentNewsTitleSize">20sp</dimen>
     <dimen name="storiesFragmentHeaderGradientAlpha">0.6</dimen>
+    <dimen name="storiesFragmentHeaderGradientHeight">70dp</dimen>
+    <dimen name="storiesFragmentAgentLogoSize">40dp</dimen>
+    <dimen name="storiesFragmentAgentLogoMarginLeft">20dp</dimen>
+    <dimen name="storiesFragmentAgentNameMargin">20dp</dimen>
+    <dimen name="storiesFragmentCloseButtonSize">30dp</dimen>
+    <dimen name="storiesFragmentCloseButtonMargin">10dp</dimen>
+    <dimen name="storiesFragmentBodyHeight">400dp</dimen>
+    <dimen name="storiesFragmentNewsTitlePadding">20dp</dimen>
+    <dimen name="storiesFragmentNewsTitlePaddingTop">5dp</dimen>
+    <dimen name="storiesFragmentNewsTitleMaxHeight">100dp</dimen>
+    <dimen name="storiesFragmentNewsTestMaxSize">300dp</dimen>
+    <dimen name="storiesFragmentNewsTextPadding">20dp</dimen>
+    <dimen name="storiesFragmentButtonHeight">700dp</dimen>
+    <dimen name="storiesFragmentButtonWidth">100dp</dimen>
 </resources>
