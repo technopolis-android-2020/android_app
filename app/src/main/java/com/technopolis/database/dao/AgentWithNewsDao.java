@@ -14,4 +14,8 @@ public interface AgentWithNewsDao {
     @Transaction
     @Query("SELECT id, name, is_shown FROM agent")
     List<AgentWithNews> loadAgentWithNews();
+
+    @Transaction
+    @Query("SELECT id, name, is_shown FROM agent WHERE agent.is_shown = 'true'")
+    List<AgentWithNews> loadShownAgentWithNews();
 }
