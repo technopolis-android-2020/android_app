@@ -137,10 +137,6 @@ public class MainActivity extends AppCompatActivity {
                 .subscribe(this::displayAgents));
     }
 
-    private int getMaxAgentId() {
-        return agentRepository.getMaxAgentId();
-    }
-
     private Long getLatestDate() {
         Long result = newsRepository.getLatestDate();
         return result == null ? 0 : result;
