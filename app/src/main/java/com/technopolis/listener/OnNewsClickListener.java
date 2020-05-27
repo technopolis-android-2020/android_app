@@ -4,16 +4,16 @@ import android.view.View;
 
 import androidx.fragment.app.FragmentManager;
 
-import com.technopolis.database.entity.News;
+import com.technopolis.database.pojo.NewsWithAgent;
 import com.technopolis.fragments.FullNewsFragment;
 
 public class OnNewsClickListener implements View.OnClickListener {
 
     private FragmentManager fragmentManager;
-    private News news;
+    private NewsWithAgent news;
     private FullNewsFragment fullNewsFragment;
 
-    public OnNewsClickListener(FragmentManager fragmentManager, News news) {
+    public OnNewsClickListener(FragmentManager fragmentManager, NewsWithAgent news) {
         this.fragmentManager = fragmentManager;
         this.news = news;
         this.fullNewsFragment = new FullNewsFragment();

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.technopolis.R;
 import com.technopolis.database.entity.News;
+import com.technopolis.database.pojo.NewsWithAgent;
 import com.technopolis.listener.OnNewsClickListener;
 import com.technopolis.network.model.NewsResponse;
 import com.technopolis.database.entity.News;
@@ -27,12 +28,12 @@ import java.util.List;
  */
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
 
-    private List<News> newsList;
+    private List<NewsWithAgent> newsList;
 
     public NewsAdapter() {
     }
 
-    public void updateAdapter(List<News> newsList) {
+    public void updateAdapter(List<NewsWithAgent> newsList) {
         this.newsList = newsList;
     }
 
@@ -73,14 +74,14 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             card = view.findViewById(R.id.card_item);
         }
 
-        void bind(News news) {
-            this.textTitle.setText(news.getTitle());
-            this.textContent.setText(news.getBody().substring(0, 15));
-            this.textAgent.setText(news.getAgentName());
+        void bind(NewsWithAgent news) {
+            this.textTitle.setText(news.news.getTitle());
+            this.textContent.setText(news.news.getBody().substring(0, 15));
+            this.textAgent.setText(news.news.getAgentName());
 
-            card.setOnClickListener(new OnNewsClickListener(fragmentManager, news)));
+            card.setOnClickListener(new OnNewsClickListener(fragmentManager, news));
             Glide.with(this.newsImage.getContext())
-                    .load(Uri.parse(news.getPreviewImgUrl()))
+                    .load(Uri.parse(news.news.getPreviewImgUrl()))
                     .into(this.newsImage);
         }
     }

@@ -51,7 +51,7 @@ public class NewsRepository {
         newsDao.insertNews(convertNews(newsResponse));
     }
 
-    public Observable<List<News>> getAllNews() {
+    public Observable<List<NewsWithAgent>> getAllNews() {
         return newsDao.getAll();
     }
 

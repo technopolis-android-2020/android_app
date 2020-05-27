@@ -18,15 +18,13 @@ import com.bumptech.glide.Glide;
 import com.technopolis.App;
 import com.technopolis.R;
 import com.technopolis.activity.MainActivity;
-import com.technopolis.database.entity.Agent;
-import com.technopolis.database.entity.News;
+import com.technopolis.database.pojo.NewsWithAgent;
 import com.technopolis.database.repositories.AgentRepository;
 
 import javax.inject.Inject;
 
 public class FullNewsFragment extends Fragment {
-    private News news;
-    private Agent agent;
+    private NewsWithAgent news;
     private ImageView agentLogo;
     private TextView agentName;
     private Button closeButton;
@@ -44,7 +42,6 @@ public class FullNewsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ((App) getActivity().getApplication()).getAppComponent().injectFullNewsFragment(this);
         hideMainActivityActionBar();
-        agent = agentRepository.getAgent(news.getAgentName());
         instance = this;
         return inflater.inflate(R.layout.news_screen, container, false);
     }
@@ -73,16 +70,16 @@ public class FullNewsFragment extends Fragment {
     }
 
     private void fillContent() {
-        agentName.setText(news.getAgentName());
-        newsTitle.setText(news.getTitle());
-        newsBody.setText(news.getBody());
+        agentName.setText(news.news.getAgentName());
+        newsTitle.setText(news.news.getTitle());
+        newsBody.setText(news.news.getBody());
 
         Glide.with(agentLogo.getContext())
-                .load(Uri.parse(agent.previewImageUrl))
+                .load(Uri.parse(news.agent.previewImageUrl))
                 .into(agentLogo);
 
         Glide.with(newsImage.getContext())
-                .load(news.getPreviewImgUrl())
+                .load(news.news.getPreviewImgUrl())
                 .into(newsImage);
     }
 
@@ -100,7 +97,7 @@ public class FullNewsFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().show();
     }
 
-    public void setNews(News news) {
+    public void setNews(NewsWithAgent news) {
         this.news = news;
     }
 }

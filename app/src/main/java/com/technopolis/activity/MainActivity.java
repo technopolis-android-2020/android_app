@@ -17,7 +17,7 @@ import com.technopolis.R;
 import com.technopolis.adapter.ListOfAgentsAdapter;
 import com.technopolis.adapter.NewsAdapter;
 import com.technopolis.database.entity.Agent;
-import com.technopolis.database.entity.News;
+import com.technopolis.database.pojo.NewsWithAgent;
 import com.technopolis.database.repositories.AgentRepository;
 import com.technopolis.database.repositories.NewsRepository;
 import com.technopolis.fragments.SettingsFragment;
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         return result == null ? 0 : result;
     }
 
-    private void displayNews(List<News> news) {
+    private void displayNews(List<NewsWithAgent> news) {
         adapter.updateAdapter(news);
         recyclerView.setAdapter(adapter);
     }

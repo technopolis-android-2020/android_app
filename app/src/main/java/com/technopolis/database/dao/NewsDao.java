@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.technopolis.database.entity.News;
+import com.technopolis.database.pojo.NewsWithAgent;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface NewsDao {
     Long getLatestDate();
 
     @Query("SELECT * FROM news")
-    Observable<List<News>> getAll();
+    Observable<List<NewsWithAgent>> getAll();
 
     @Query("SELECT * FROM news WHERE publication_date = :publication_date")
     List<News> getNewsByPublicationDate(long publication_date);

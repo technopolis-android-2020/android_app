@@ -57,7 +57,7 @@ public class AgentRepository {
     }
 
     private Agent convertAgentsResponseToAgent(AgentsResponse agentsResponse) {
-        return new Agent(agentsResponse.title, true, agentsResponse.previewImageUrl);
+        return new Agent(agentsResponse.title, agentsResponse.previewImageUrl, true);
     }
 
     public boolean getIsShown(@NonNull final String name) {
