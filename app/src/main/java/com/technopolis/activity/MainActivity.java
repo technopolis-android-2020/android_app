@@ -78,8 +78,13 @@ public class MainActivity extends AppCompatActivity {
                 android.R.color.holo_blue_bright,
                 android.R.color.holo_red_light);
 
-        fetchDataFromBD();
         fetchDataFromServer();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchDataFromBD();
     }
 
     @Override
@@ -91,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void fetchDataFromBD() {
         compositeDisposable.add(
-                agentRepository.getAgents()
+                agentRepository.getShownAgents()
                         .observeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(this::displayAgents));
@@ -114,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                                 httpClient.getAgentsResponse()
                                         //запрос агентов с сервера, добавление их в бд и отрисовка из бд
                                         .doOnNext(agentsResponses -> agentRepository.insertAgents(agentsResponses))
-                                        .flatMap(agent -> agentRepository.getAgents())
+                                        .flatMap(agent -> agentRepository.getShownAgents())
                                         .doOnNext(this::preDisplayAgent)
                                         //запрос новостей с сервера, добавление их в бд и отрисовка из бд
                                         .flatMap(newsResponse -> httpClient.getNewsByDate(getLatestDate()))

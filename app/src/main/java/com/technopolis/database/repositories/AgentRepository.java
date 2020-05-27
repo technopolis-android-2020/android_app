@@ -39,6 +39,10 @@ public class AgentRepository {
         return agentDao.getAll();
     }
 
+    public Observable<List<Agent>> getShownAgents() {
+        return agentDao.getAllShown(true);
+    }
+
     public List<Agent> getAgentsNotObservable() {
         return agentDao.getAllNotObservable();
     }
