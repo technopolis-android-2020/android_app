@@ -65,7 +65,7 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void hideMainActivityActionBar() {
-        ((MainActivity) getActivity()).getSupportActionBar().hide();
+        //((MainActivity) getActivity()).getSupportActionBar().hide();
     }
 
     private void showMainActivityActionBar() {

@@ -155,7 +155,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
+        int i = getSupportFragmentManager().getBackStackEntryCount();
+        System.out.println("i:" + i);
+        if (i != 0 && getSupportFragmentManager().getBackStackEntryAt(i-1).getName() != null && getSupportFragmentManager().getBackStackEntryAt(i-1).getName().equals("placeSettingsFragment")) {
+            inflater.inflate(R.menu.settings_menu, menu);
+        } else {
+            inflater.inflate(R.menu.menu, menu);
+        }
+        //if (getSupportFragmentManager().getBackStackEntryAt().getName())
         return true;
     }
 
