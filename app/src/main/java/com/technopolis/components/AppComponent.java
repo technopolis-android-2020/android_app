@@ -1,6 +1,7 @@
 package com.technopolis.components;
 
 import com.technopolis.activity.MainActivity;
+import com.technopolis.fragments.FullNewsFragment;
 import com.technopolis.fragments.SettingsFragment;
 import com.technopolis.modules.AppModule;
 
@@ -14,4 +15,6 @@ public interface AppComponent {
     void inject(MainActivity activity);
 
     void injectSettingsFragment(SettingsFragment fragment);
+
+    void injectFullNewsFragment(FullNewsFragment newsFragment);
 }
