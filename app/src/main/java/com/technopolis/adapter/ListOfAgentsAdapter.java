@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.technopolis.R;
 import com.technopolis.database.entity.Agent;
@@ -25,8 +28,11 @@ public class ListOfAgentsAdapter extends RecyclerView.Adapter<ListOfAgentsAdapte
 
     private List<Agent> agents;
 
+    public ListOfAgentsAdapter() {
+
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public static FragmentManager mainActivityFragmentManager;
         public TextView textView;
         public ImageView imageView;
         public ConstraintLayout mainFrame;
@@ -70,11 +76,7 @@ public class ListOfAgentsAdapter extends RecyclerView.Adapter<ListOfAgentsAdapte
         return agents.size();
     }
 
-    public void updateAdapter(List<AgentsResponse> agents) {
-        List<Agent> a = new ArrayList<>();
-        for (AgentsResponse e: agents) {
-            a.add(new Agent(e.title, e.previewImageUrl, true));
-        }
-        this.agents = a;
+    public void updateAdapter(List<Agent> agents) {
+        this.agents = agents;
     }
 }

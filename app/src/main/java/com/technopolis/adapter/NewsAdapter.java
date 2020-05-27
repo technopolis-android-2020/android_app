@@ -17,6 +17,7 @@ import com.technopolis.R;
 import com.technopolis.database.entity.News;
 import com.technopolis.listener.OnNewsClickListener;
 import com.technopolis.network.model.NewsResponse;
+import com.technopolis.database.entity.News;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +27,12 @@ import java.util.List;
  */
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
 
-    private List<NewsResponse> newsList;
+    private List<News> newsList;
 
     public NewsAdapter() {
     }
 
-    public void updateAdapter(List<NewsResponse> newsList) {
+    public void updateAdapter(List<News> newsList) {
         this.newsList = newsList;
     }
 
@@ -54,6 +55,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         return newsList.size();
     }
 
+
     public static class NewsViewHolder extends RecyclerView.ViewHolder {
         public static FragmentManager fragmentManager;
         TextView textTitle;
@@ -71,16 +73,14 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             card = view.findViewById(R.id.card_item);
         }
 
-        void bind(NewsResponse newsResponse) {
-            this.textTitle.setText(newsResponse.title);
-            this.textContent.setText(newsResponse.body.substring(0, 15));
-            this.textAgent.setText(newsResponse.agent);
+        void bind(News news) {
+            this.textTitle.setText(news.getTitle());
+            this.textContent.setText(news.getBody().substring(0, 15));
+            this.textAgent.setText(news.getAgentName());
 
-            card.setOnClickListener(new OnNewsClickListener(fragmentManager, new News(newsResponse.id, newsResponse.title,
-                    newsResponse.logo, newsResponse.body, newsResponse.url, newsResponse.date,
-                    newsResponse.agent)));
+            card.setOnClickListener(new OnNewsClickListener(fragmentManager, news)));
             Glide.with(this.newsImage.getContext())
-                    .load(Uri.parse(newsResponse.logo))
+                    .load(Uri.parse(news.getPreviewImgUrl()))
                     .into(this.newsImage);
         }
     }

@@ -1,10 +1,10 @@
 package com.technopolis.network.model;
 
 public class NewsResponse {
-    public String date;
+    public Long date;
     public String agent;
     public String logo;
-    public int id;
+    public long id;
     public String title;
     public String body;
     public String url;
@@ -12,7 +12,7 @@ public class NewsResponse {
     public NewsResponse() {
     }
 
-    public NewsResponse(String date, String agent, String logo, int id, String title, String body, String url) {
+    public NewsResponse(Long date, String agent, String logo, long id, String title, String body, String url) {
         this.date = date;
         this.agent = agent;
         this.logo = logo;

@@ -11,11 +11,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork;
 import com.technopolis.App;
 import com.technopolis.R;
 import com.technopolis.adapter.ListOfAgentsAdapter;
 import com.technopolis.adapter.NewsAdapter;
+import com.technopolis.database.entity.Agent;
+import com.technopolis.database.entity.News;
 import com.technopolis.database.repositories.AgentRepository;
+import com.technopolis.database.repositories.NewsRepository;
 import com.technopolis.fragments.SettingsFragment;
 import com.technopolis.network.model.AgentsResponse;
 import com.technopolis.network.model.NewsResponse;
@@ -25,6 +29,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -42,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     HttpClient httpClient;
     @Inject
     AgentRepository agentRepository;
+    @Inject
+    NewsRepository newsRepository;
     private SwipeRefreshLayout swipeContainer;
 
     @Override
@@ -64,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         NewsAdapter.NewsViewHolder.fragmentManager = getSupportFragmentManager();
 
         // refresh list
-        swipeContainer.setOnRefreshListener(this::fetchData);
+        swipeContainer.setOnRefreshListener(this::fetchDataFromServer);
 
         // configure refreshing colors
         swipeContainer.setColorSchemeResources(android.R.color.holo_green_light,
@@ -72,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
                 android.R.color.holo_blue_bright,
                 android.R.color.holo_red_light);
 
-        fetchData();
+        fetchDataFromBD();
+        fetchDataFromServer();
     }
 
     @Override
@@ -81,29 +90,67 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void fetchData() {
-        compositeDisposable.addAll(
-                httpClient.getNewsResponse()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::displayNews),
-                httpClient.getAgentsResponse()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::displayAgents)
-        );
 
-        swipeContainer.setRefreshing(false);
-        Log.d(LOG_TAG, "News are updated!");
+    private void fetchDataFromBD() {
+        compositeDisposable.add(
+                agentRepository.getAgents()
+                        .observeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::displayAgents));
+
+        compositeDisposable.add(
+                newsRepository.getAllNews()
+                        .observeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::displayNews));
     }
 
-    private void displayNews(List<NewsResponse> newsResponses) {
-        adapter.updateAdapter(newsResponses);
+    private void fetchDataFromServer() {
+        Single<Boolean> checkInternetConnection = ReactiveNetwork.checkInternetConnectivity();
+
+        compositeDisposable.add(checkInternetConnection
+                .subscribeOn(Schedulers.io())
+                .subscribe(isConnectedToInternet -> {
+                    if (isConnectedToInternet) {
+                        compositeDisposable.add(
+                                httpClient.getAgentsResponse()
+                                        //запрос агентов с сервера, добавление их в бд и отрисовка из бд
+                                        .doOnNext(agentsResponses -> agentRepository.insertAgents(agentsResponses))
+                                        .flatMap(agent -> agentRepository.getAgents())
+                                        .doOnNext(this::preDisplayAgent)
+                                        //запрос новостей с сервера, добавление их в бд и отрисовка из бд
+                                        .flatMap(newsResponse -> httpClient.getNewsByDate(getLatestDate()))
+                                        .doOnNext(listNews -> newsRepository.insertAllNews(listNews))
+                                        .flatMap(news -> newsRepository.getAllNews())
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(this::displayNews));
+                        Log.d(LOG_TAG, "News are updated!");
+                    } else {
+                        Log.d(LOG_TAG, "No internet connection");
+                    }
+                }));
+        swipeContainer.setRefreshing(false);
+    }
+
+    private void preDisplayAgent(List<Agent> agents) {
+        compositeDisposable.add(Observable.fromArray(agents)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::displayAgents));
+    }
+
+    private Long getLatestDate() {
+        Long result = newsRepository.getLatestDate();
+        return result == null ? 0 : result;
+    }
+
+    private void displayNews(List<News> news) {
+        adapter.updateAdapter(news);
         recyclerView.setAdapter(adapter);
     }
 
-    private void displayAgents(List<AgentsResponse> agentsResponses) {
-        listOfAgentsAdapter.updateAdapter(agentsResponses);
+    private void displayAgents(List<Agent> agents) {
+        listOfAgentsAdapter.updateAdapter(agents);
         listOfAgents.setAdapter(listOfAgentsAdapter);
     }
 

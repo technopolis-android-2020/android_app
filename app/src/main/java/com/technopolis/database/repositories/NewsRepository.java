@@ -18,7 +18,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import io.reactivex.Observable;
 
-public class NewsRepository{
+public class NewsRepository {
 
     private NewsDao newsDao;
     private AgentDao agentDao;
@@ -31,12 +31,16 @@ public class NewsRepository{
         agentWithNewsDao = db.agentWithNewsDao();
     }
 
-    private News convertNews(final NewsResponse newsResponse){
+    public Long getLatestDate() {
+        return newsDao.getLatestDate();
+    }
+
+    private News convertNews(final NewsResponse newsResponse) {
         Agent agent;
         News news = new News(newsResponse.id, newsResponse.title, newsResponse.logo,
                 newsResponse.body, newsResponse.url, newsResponse.date, newsResponse.agent);
 
-        if ( (agent = agentDao.getAgent(news.getAgentName())) != null) {
+        if ((agent = agentDao.getAgent(news.getAgentName())) != null) {
             news.setAgentId(agent.id);
         }
 
@@ -51,12 +55,11 @@ public class NewsRepository{
         return newsDao.getAll();
     }
 
-    private List<News> castToNews(final List<NewsResponse> newsResponses){
+    private List<News> castToNews(final List<NewsResponse> newsResponses) {
         List<News> news = new ArrayList<>();
-        for (NewsResponse response:newsResponses
-             ) {
-            news.add(new News(response.id, response.title, response.logo, response.body,
-                    response.url, response.date, response.agent));
+        for (NewsResponse response : newsResponses
+        ) {
+            news.add(convertNews(response));
         }
         return news;
     }

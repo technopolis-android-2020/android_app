@@ -9,7 +9,7 @@ public class AgentsResponse {
 
     }
 
-    public AgentsResponse(int id, String title, String previewImageUrl) {
+    public AgentsResponse(int id, String name, String previewImageUrl) {
         this.id = id;
         this.title = title;
         this.previewImageUrl = previewImageUrl;

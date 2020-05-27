@@ -4,9 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "agent")
+@Entity(tableName = "agent",
+        indices = {@Index(value = {"id", "name"}, unique = true)})
 public class Agent {
 
     @PrimaryKey(autoGenerate = true)

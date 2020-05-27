@@ -5,9 +5,11 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "news",
+        indices = {@Index(value = {"id"}, unique = true)},
         foreignKeys =
         @ForeignKey(entity =
                 Agent.class,
@@ -16,7 +18,7 @@ import androidx.room.PrimaryKey;
 public class News {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
 
     @ColumnInfo(name = "title")
     @NonNull
@@ -35,7 +37,7 @@ public class News {
     private String url;
 
     @ColumnInfo(name = "publication_date")
-    private String publicationDate;
+    private Long publicationDate;
 
     @ColumnInfo(name = "agent_id")
     private int agentId;
@@ -43,9 +45,9 @@ public class News {
     @Ignore
     private String agentName;
 
-    public News(final int id, @NonNull final String title,
+    public News(final long id, @NonNull final String title,
                 @NonNull final String previewImgUrl, @NonNull final String body,
-                @NonNull final String url, final String publicationDate, final int agentId) {
+                @NonNull final String url, final Long publicationDate, final int agentId) {
         this.id = id;
         this.title = title;
         this.previewImgUrl = previewImgUrl;
@@ -55,9 +57,9 @@ public class News {
         this.agentId = agentId;
     }
 
-    public News(final int id, @NonNull final String title,
+    public News(final long id, @NonNull final String title,
                 @NonNull final String previewImgUrl, @NonNull final String body,
-                @NonNull final String url, final String publicationDate, final String agentName) {
+                @NonNull final String url, final Long publicationDate, final String agentName) {
         this.id = id;
         this.title = title;
         this.previewImgUrl = previewImgUrl;
@@ -70,7 +72,7 @@ public class News {
     @Ignore
     public News(@NonNull final String title, @NonNull final String previewImgUrl,
                 @NonNull final String body, @NonNull final String url,
-                final String publicationDate, final String agentName) {
+                final Long publicationDate, final String agentName) {
         this.title = title;
         this.previewImgUrl = previewImgUrl;
         this.body = body;
@@ -95,11 +97,11 @@ public class News {
         this.agentId = agentId;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -139,11 +141,11 @@ public class News {
         this.url = url;
     }
 
-    public String getPublicationDate() {
+    public Long getPublicationDate() {
         return publicationDate;
     }
 
-    public void setPublicationDate(String publicationDate) {
+    public void setPublicationDate(Long publicationDate) {
         this.publicationDate = publicationDate;
     }
 }

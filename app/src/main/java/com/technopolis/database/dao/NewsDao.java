@@ -1,17 +1,21 @@
 package com.technopolis.database.dao;
 
+import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
+import androidx.room.Query;
+
 import com.technopolis.database.entity.News;
 
 import java.util.List;
-
-import androidx.room.Dao;
-import androidx.room.Insert;
-import androidx.room.Query;
 
 import io.reactivex.Observable;
 
 @Dao
 public interface NewsDao {
+
+    @Query("SELECT MAX(publication_date) FROM news")
+    Long getLatestDate();
 
     @Query("SELECT * FROM news")
     Observable<List<News>> getAll();
@@ -19,10 +23,10 @@ public interface NewsDao {
     @Query("SELECT * FROM news WHERE publication_date = :publication_date")
     List<News> getNewsByPublicationDate(long publication_date);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<News> news);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertNews(News news);
 
     @Query("DELETE FROM news")

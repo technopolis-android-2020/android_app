@@ -33,4 +33,9 @@ public class HttpClient {
     public Observable<List<AgentsResponse>> getAgentsResponse() {
         return newsServerAPI.getAgents();
     }
+
+    @NonNull
+    public Observable<List<NewsResponse>> getNewsByDate(@NonNull final Long date) {
+        return newsServerAPI.getNewsByDate(date);
+    }
 }
