@@ -45,9 +45,8 @@ public class AgentRepository {
 
     private List<Agent> castToAgents(final List<AgentsResponse> agentResponses) {
         List<Agent> agents = new ArrayList<>();
-        for (AgentsResponse response : agentResponses
-        ) {
-            agents.add(new Agent(response.title, true, response.previewImageUrl));
+        for (AgentsResponse response : agentResponses) {
+            agents.add(new Agent(response.title, response.previewImageUrl, true));
         }
         return agents;
     }

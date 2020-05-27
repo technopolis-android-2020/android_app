@@ -29,6 +29,7 @@ public class ListOfAgentsAdapter extends RecyclerView.Adapter<ListOfAgentsAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        public static FragmentManager mainActivityFragmentManager;
         public TextView textView;
         public ImageView imageView;
         public ConstraintLayout mainFrame;
