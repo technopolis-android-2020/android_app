@@ -14,15 +14,11 @@ import com.bumptech.glide.Glide;
 import com.technopolis.R;
 import com.technopolis.database.entity.Agent;
 import com.technopolis.listener.OnAgentClickListener;
-import com.technopolis.network.model.AgentsResponse;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class ListOfAgentsAdapter extends RecyclerView.Adapter<ListOfAgentsAdapter.ViewHolder> {
 

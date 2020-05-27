@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.preference.PreferenceFragment;
 import androidx.preference.PreferenceGroup;
 
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import androidx.preference.SwitchPreference;
 import com.technopolis.App;
 import com.technopolis.R;
 import com.technopolis.activity.MainActivity;
-import com.technopolis.database.entity.Agent;
 import com.technopolis.database.repositories.AgentRepository;
 import javax.inject.Inject;
 

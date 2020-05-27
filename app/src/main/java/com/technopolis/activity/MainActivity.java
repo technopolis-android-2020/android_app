@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork;
 import com.technopolis.App;
 import com.technopolis.R;
 import com.technopolis.adapter.ListOfAgentsAdapter;
@@ -21,8 +20,6 @@ import com.technopolis.database.pojo.NewsWithAgent;
 import com.technopolis.database.repositories.AgentRepository;
 import com.technopolis.database.repositories.NewsRepository;
 import com.technopolis.fragments.SettingsFragment;
-import com.technopolis.network.model.AgentsResponse;
-import com.technopolis.network.model.NewsResponse;
 import com.technopolis.network.retrofit.HttpClient;
 
 import java.util.List;
