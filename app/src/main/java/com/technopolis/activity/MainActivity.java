@@ -16,6 +16,7 @@ import com.technopolis.R;
 import com.technopolis.adapter.ListOfAgentsAdapter;
 import com.technopolis.adapter.NewsAdapter;
 import com.technopolis.database.repositories.AgentRepository;
+import com.technopolis.database.repositories.NewsRepository;
 import com.technopolis.fragments.SettingsFragment;
 import com.technopolis.network.model.AgentsResponse;
 import com.technopolis.network.model.NewsResponse;
@@ -42,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     HttpClient httpClient;
     @Inject
     AgentRepository agentRepository;
+    @Inject
+    NewsRepository newsRepository;
     private SwipeRefreshLayout swipeContainer;
 
     @Override
@@ -59,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         listOfAgents.setLayoutManager(
                 new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         );
+        ListOfAgentsAdapter.ViewHolder.mainActivityFragmentManager = getSupportFragmentManager();
 
         // refresh list
         swipeContainer.setOnRefreshListener(this::fetchData);

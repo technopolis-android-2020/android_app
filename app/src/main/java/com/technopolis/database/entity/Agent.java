@@ -16,16 +16,21 @@ public class Agent {
     @NonNull
     public String name;
 
+    @ColumnInfo(name = "preview_image_url")
+    @NonNull
+    public String previewImageUrl;
+
     @ColumnInfo(name = "is_shown")
     public boolean isShown;
 
     @Ignore
     public Agent(@NonNull final String name) {
-        this(name, true);
+        this(name, "", true);
     }
 
-    public Agent(@NonNull final String name, final boolean isShown) {
+    public Agent(@NonNull final String name, @NonNull final String previewImageUrl, final boolean isShown) {
         this.name = name;
+        this.previewImageUrl = previewImageUrl;
         this.isShown = isShown;
     }
 }

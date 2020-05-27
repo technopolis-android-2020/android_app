@@ -4,25 +4,31 @@ import android.content.Context;
 
 import com.technopolis.database.AppDatabase;
 import com.technopolis.database.dao.AgentDao;
+import com.technopolis.database.dao.AgentWithNewsDao;
 import com.technopolis.database.dao.NewsDao;
 import com.technopolis.database.entity.Agent;
 import com.technopolis.database.entity.News;
+import com.technopolis.database.pojo.AgentWithNews;
+import com.technopolis.database.pojo.NewsWithAgent;
 import com.technopolis.network.model.NewsResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import io.reactivex.Observable;
 
 public class NewsRepository{
 
     private NewsDao newsDao;
     private AgentDao agentDao;
+    private AgentWithNewsDao agentWithNewsDao;
 
     public NewsRepository(final Context context) {
         AppDatabase db = AppDatabase.getInstance(context);
         newsDao = db.newsDao();
         agentDao = db.agentDao();
+        agentWithNewsDao = db.agentWithNewsDao();
     }
 
     private News convertNews(final NewsResponse newsResponse){
@@ -57,6 +63,31 @@ public class NewsRepository{
 
     public void insertAllNews(final List<NewsResponse> newsResponses) {
         newsDao.insertAll(castToNews(newsResponses));
+    }
+
+
+    public NewsWithAgent loadOneLastNews(@NonNull final String agentName) {
+        AgentWithNews agentWithNews= agentWithNewsDao.loadAgentWithNews(agentName);
+        NewsWithAgent result = new NewsWithAgent();
+
+        if (agentWithNews == null) {
+            return null;
+        }
+
+        // find one latest news
+        News latestNews = agentWithNews.news.get(0);
+        for (News news: agentWithNews.news) {
+            if (news.getPublicationDate().compareTo(latestNews.getPublicationDate()) > 0) {
+                latestNews = news;
+            }
+        }
+        latestNews.setAgentName(agentName);
+
+        // set result
+        result.news = latestNews;
+        result.agent = agentWithNews.agent;
+
+        return result;
     }
 
 }

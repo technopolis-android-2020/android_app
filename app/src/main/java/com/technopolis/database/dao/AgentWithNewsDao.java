@@ -12,10 +12,14 @@ import androidx.room.Transaction;
 public interface AgentWithNewsDao {
 
     @Transaction
-    @Query("SELECT id, name, is_shown FROM agent")
+    @Query("SELECT id, name, preview_image_url, is_shown FROM agent")
     List<AgentWithNews> loadAgentWithNews();
 
     @Transaction
-    @Query("SELECT id, name, is_shown FROM agent WHERE agent.is_shown = 'true'")
+    @Query("SELECT id, name, preview_image_url, is_shown FROM agent WHERE agent.is_shown = 'true'")
     List<AgentWithNews> loadShownAgentWithNews();
+
+    @Transaction
+    @Query("SELECT id, name, preview_image_url, is_shown FROM agent WHERE agent.name = :agentName")
+    AgentWithNews loadAgentWithNews(final String agentName);
 }
