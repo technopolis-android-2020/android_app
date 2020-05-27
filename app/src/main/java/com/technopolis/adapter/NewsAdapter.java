@@ -18,6 +18,7 @@ import com.technopolis.database.entity.News;
 import com.technopolis.listener.OnNewsClickListener;
 import com.technopolis.network.model.NewsResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*

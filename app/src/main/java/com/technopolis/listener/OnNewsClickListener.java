@@ -27,7 +27,5 @@ public class OnNewsClickListener implements View.OnClickListener {
                 .replace(android.R.id.content, fullNewsFragment)
                 .addToBackStack("fullNewsScreen")
                 .commit();
-
-
     }
 }

@@ -62,11 +62,6 @@ public class MainActivity extends AppCompatActivity {
                 new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         );
 
-//        agentRepository.insertAgent(new Agent("Vedomosti", "http://pics.rbc.ru/img/fp_v4/skin/img/v6-logo.png", true));
-//        agentRepository.insertAgent(new Agent("Habr", "https://nplus1.ru/i/logo.png", true));
-//        agentRepository.insertAgent(new Agent("Nplus1", "http://pics.rbc.ru/img/fp_v4/skin/img/v6-logo.png", true));
-//        agentRepository.insertAgent(new Agent("RBC", "https://nplus1.ru/i/logo.png", true));
-
         NewsAdapter.NewsViewHolder.fragmentManager = getSupportFragmentManager();
 
         // refresh list
