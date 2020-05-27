@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">News Alligator</string>
+    <string name="prefCategory">Новостные источники</string>
+    <string name="settings">Настройки</string>
+    <string name="agentLogo">Логотип новостного источника</string>
+    <string name="newsImage">Картинка новости</string>
+    <string name="agentsCategory">Новостные источники</string>
+</resources>

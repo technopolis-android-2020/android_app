@@ -4,4 +4,6 @@
     <string name="settings">settings</string>
     <string name="agentLogo">AgentLogo</string>
     <string name="newsImage">NewsImage</string>
+    <string name="settings_menu" translatable="false">settings_menu</string>
+    <string name="agentsCategory">AGENTS</string>
 </resources>

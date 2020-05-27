@@ -28,7 +28,6 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         hideMainActivityActionBar();
-
         View view = super.onCreateView(inflater, container, savedInstanceState);
         view.setBackgroundColor(getResources().getColor(R.color.colorWhite));
         getActivity().invalidateOptionsMenu();
@@ -69,7 +68,7 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void showMainActivityActionBar() {
-        ((MainActivity) getActivity()).getSupportActionBar().show();
+       // ((MainActivity) getActivity()).getSupportActionBar().show();
     }
 
 }
