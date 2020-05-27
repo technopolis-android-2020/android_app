@@ -8,7 +8,7 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "agent",
-        indices = {@Index(value = {"id", "name"}, unique = true)})
+        indices = {@Index(value = {"name"}, unique = true)})
 public class Agent {
 
     @PrimaryKey(autoGenerate = true)
