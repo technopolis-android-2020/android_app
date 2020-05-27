@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork;
 import com.technopolis.App;
 import com.technopolis.R;
 import com.technopolis.adapter.ListOfAgentsAdapter;
@@ -28,6 +29,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         );
 
         // refresh list
-        swipeContainer.setOnRefreshListener(this::fetchData);
+        swipeContainer.setOnRefreshListener(this::fetchDataFromServer);
 
         // configure refreshing colors
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -75,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        fetchData();
+        fetchDataFromBD();
+        fetchDataFromServer();
     }
 
     @Override
@@ -84,31 +87,48 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void fetchData() {
+
+    private void fetchDataFromBD() {
         compositeDisposable.add(
-                //рисуем агентов из бд
-                /*agentRepository.getAgents()
-                .doOnNext(this::preDisplayAgent)
-                //рисуем новости из бд
-                .flatMap(news -> newsRepository.getAllNews())
-                .doOnNext(news -> compositeDisposable.add(Observable.fromArray(news)
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(this::displayNews)))*/
-                //запрос агентов с сервера, добавление их в бд и отрисовка из бд
-                httpClient.getAgentsResponse()
-                        .doOnNext(agentsResponses -> agentRepository.insertAgents(agentsResponses))
-                        .flatMap(agent -> agentRepository.getAgents())
-                        .doOnNext(this::preDisplayAgent)
-                        //запрос новостей с сервера, добавление их в бд и отрисовка из бд
-                        .flatMap(newsResponse -> httpClient.getNewsByDate(getLatestDate()))
-                        .doOnNext(listNews -> newsRepository.insertAllNews(listNews))
-                        .flatMap(news -> newsRepository.getAllNews())
-                        .subscribeOn(Schedulers.io())
+                agentRepository.getAgents()
+                        .observeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::displayAgents));
+
+        compositeDisposable.add(
+                newsRepository.getAllNews()
+                        .observeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(this::displayNews));
+    }
 
+    private void fetchDataFromServer() {
+        Single<Boolean> checkInternetConnection = ReactiveNetwork.checkInternetConnectivity();
+
+        compositeDisposable.add(
+                checkInternetConnection
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(isConnectedToInternet -> {
+                            if (isConnectedToInternet) {
+                                compositeDisposable.add(
+                                        httpClient.getAgentsResponse()
+                                                //запрос агентов с сервера, добавление их в бд и отрисовка из бд
+                                                .doOnNext(agentsResponses -> agentRepository.insertAgents(agentsResponses))
+                                                .flatMap(agent -> agentRepository.getAgents())
+                                                .doOnNext(this::preDisplayAgent)
+                                                //запрос новостей с сервера, добавление их в бд и отрисовка из бд
+                                                .flatMap(newsResponse -> httpClient.getNewsByDate(getLatestDate()))
+                                                .doOnNext(listNews -> newsRepository.insertAllNews(listNews))
+                                                .flatMap(news -> newsRepository.getAllNews())
+                                                .subscribeOn(Schedulers.io())
+                                                .observeOn(AndroidSchedulers.mainThread())
+                                                .subscribe(this::displayNews));
+                                Log.d(LOG_TAG, "News are updated!");
+                            } else {
+                                Log.d(LOG_TAG, "No internet connection");
+                            }
+                        }));
         swipeContainer.setRefreshing(false);
-        Log.d(LOG_TAG, "News are updated!");
     }
 
     private void preDisplayAgent(List<Agent> agents) {

@@ -63,6 +63,7 @@ dependencies {
 
     implementation 'com.android.volley:volley:1.1.1'
 
+    implementation 'com.github.pwittchen:reactivenetwork-rx2:3.0.8'
     //Retrofit2
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.8.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
