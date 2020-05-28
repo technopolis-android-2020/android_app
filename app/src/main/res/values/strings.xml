@@ -6,4 +6,5 @@
     <string name="newsImage">NewsImage</string>
     <string name="settings_menu" translatable="false">settings_menu</string>
     <string name="agentsCategory">AGENTS</string>
+    <string name="noInternetConnection">No Internet Connection</string>
 </resources>
