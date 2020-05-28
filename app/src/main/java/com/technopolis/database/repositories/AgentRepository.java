@@ -48,7 +48,11 @@ public class AgentRepository {
     }
 
     public void insertAgents(List<AgentsResponse> agents) {
-        agentDao.insert(castToAgents(agents));
+        try {
+            agentDao.insert(castToAgents(agents));
+        } catch (Exception ignore) {
+
+        }
     }
 
     private List<Agent> castToAgents(final List<AgentsResponse> agentResponses) {
