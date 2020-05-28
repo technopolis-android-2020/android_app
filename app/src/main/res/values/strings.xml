@@ -5,4 +5,8 @@
     <string name="agentLogo">AgentLogo</string>
     <string name="newsImage">NewsImage</string>
     <string name="noInternetConnection">No Internet Connection</string>
+    <string name="image">image</string>
+    <string name="title">Title</string>
+    <string name="agent">Agent</string>
+    <string name="content">Content</string>
 </resources>
