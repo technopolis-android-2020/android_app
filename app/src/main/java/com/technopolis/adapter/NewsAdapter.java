@@ -14,13 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.technopolis.R;
-import com.technopolis.database.entity.News;
 import com.technopolis.database.pojo.NewsWithAgent;
 import com.technopolis.listener.OnNewsClickListener;
-import com.technopolis.network.model.NewsResponse;
-import com.technopolis.database.entity.News;
 
-import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
@@ -57,7 +55,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     public static class NewsViewHolder extends RecyclerView.ViewHolder {
         public static FragmentManager fragmentManager;
         TextView textTitle;
-        TextView textContent;
+        TextView publicationDate;
         TextView textAgent;
         ImageView newsImage;
         CardView card;
@@ -65,16 +63,24 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         public NewsViewHolder(View view) {
             super(view);
             textTitle = view.findViewById(R.id.txt_title);
-            textContent = view.findViewById(R.id.txt_content);
+            publicationDate = view.findViewById(R.id.publication_date);
             textAgent = view.findViewById(R.id.txt_agent);
             newsImage = view.findViewById(R.id.rec_item_image_view);
             card = view.findViewById(R.id.card_item);
         }
 
         void bind(NewsWithAgent news) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date(news.news.getPublicationDate()));
+
             this.textTitle.setText(news.news.getTitle());
-            this.textContent.setText(news.news.getBody().substring(0, 15));
             this.textAgent.setText(news.agent.name);
+            this.publicationDate.setText(publicationDate.getContext().getString(
+                    R.string.news_publication_date,
+                    calendar.get(Calendar.DAY_OF_MONTH),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.YEAR))
+            );
 
             card.setOnClickListener(new OnNewsClickListener(fragmentManager, news));
             Glide.with(this.newsImage.getContext())

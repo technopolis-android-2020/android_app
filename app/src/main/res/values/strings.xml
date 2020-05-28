@@ -5,4 +5,8 @@
     <string name="agentLogo">AgentLogo</string>
     <string name="newsImage">NewsImage</string>
     <string name="noInternetConnection">No Internet Connection</string>
+    <string name="news_publication_date">%1$d-%2$d-%3$d</string>
+    <string name="settings_menu">settings_menu</string>
+    <string name="agentsCategory">AGENTS</string>
+    <string name="AGENTS">AGENTS</string>
 </resources>
