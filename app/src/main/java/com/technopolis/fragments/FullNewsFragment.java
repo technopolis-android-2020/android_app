@@ -31,7 +31,6 @@ public class FullNewsFragment extends Fragment {
     private TextView newsTitle;
     private TextView newsBody;
     private static final String LOG_TAG = FullNewsFragment.class.getSimpleName();
-    private FullNewsFragment instance;
 
     @Inject
     AgentRepository agentRepository;
@@ -41,7 +40,6 @@ public class FullNewsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ((App) getActivity().getApplication()).getAppComponent().injectFullNewsFragment(this);
         hideMainActivityActionBar();
-        instance = this;
         return inflater.inflate(R.layout.news_screen, container, false);
     }
 
