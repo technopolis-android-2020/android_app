@@ -7,4 +7,5 @@
     <string name="agentsCategory">НОВОСТНЫЕ ИСТОЧНИКИ</string>
     <string name="settings_menu">Меню настроек</string>
     <string name="noInternetConnection">Отсутствует соединение с сетью</string>
+    <string name="settings_toolbar">Toolbar настроек</string>
 </resources>
