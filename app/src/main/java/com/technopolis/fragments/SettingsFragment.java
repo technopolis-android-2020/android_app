@@ -13,7 +13,6 @@ import androidx.preference.SwitchPreference;
 
 import com.technopolis.App;
 import com.technopolis.R;
-import com.technopolis.activity.MainActivity;
 import com.technopolis.database.entity.Agent;
 import com.technopolis.database.repositories.AgentRepository;
 
