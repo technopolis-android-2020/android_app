@@ -4,5 +4,7 @@
     <string name="settings">Настройки</string>
     <string name="agentLogo">Логотип новостного источника</string>
     <string name="newsImage">Картинка новости</string>
-    <string name="agentsCategory">Новостные источники</string>
+    <string name="agentsCategory">НОВОСТНЫЕ ИСТОЧНИКИ</string>
+    <string name="settings_menu">Меню настроек</string>
+    <string name="noInternetConnection">Отсутствует соединение с сетью</string>
 </resources>
