@@ -26,6 +26,7 @@ import com.technopolis.fragments.SettingsFragment;
 import com.technopolis.network.retrofit.HttpClient;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -80,8 +81,13 @@ public class MainActivity extends AppCompatActivity {
                 android.R.color.holo_blue_bright,
                 android.R.color.holo_red_light);
 
-        fetchDataFromBD();
         fetchDataFromServer();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchDataFromBD();
     }
 
     @Override
@@ -93,16 +99,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void fetchDataFromBD() {
         compositeDisposable.add(
-                agentRepository.getAgents()
-                        .observeOn(Schedulers.io())
+                agentRepository.getShownAgents()
+                        .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(this::displayAgents));
 
         compositeDisposable.add(
-                newsRepository.getAllNews()
+                newsRepository.getAllNewsSortedByDate()
+                        .subscribeOn(Schedulers.io())
                         .observeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::displayNews));
+                        .subscribe(this::filterNews));
     }
 
     private void fetchDataFromServer() {
@@ -117,15 +123,15 @@ public class MainActivity extends AppCompatActivity {
                                 httpClient.getAgentsResponse()
                                         //запрос агентов с сервера, добавление их в бд и отрисовка из бд
                                         .doOnNext(agentsResponses -> agentRepository.insertAgents(agentsResponses))
-                                        .flatMap(agent -> agentRepository.getAgents())
+                                        .flatMap(agent -> agentRepository.getShownAgents())
                                         .doOnNext(this::preDisplayAgent)
                                         //запрос новостей с сервера, добавление их в бд и отрисовка из бд
                                         .flatMap(newsResponse -> httpClient.getNewsByDate(getLatestDate()))
                                         .doOnNext(listNews -> newsRepository.insertAllNews(listNews))
-                                        .flatMap(news -> newsRepository.getAllNews())
+                                        .flatMap(news -> newsRepository.getAllNewsSortedByDate())
                                         .subscribeOn(Schedulers.io())
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe(this::displayNews));
+                                        .observeOn(Schedulers.io())
+                                        .subscribe(this::filterNews));
                         Log.d(LOG_TAG, "News are updated!");
                     } else {
                         compositeDisposable.add(checkInternetConnection
@@ -145,6 +151,16 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
+    private void filterNews(List<NewsWithAgent> newsWithAgents) {
+        compositeDisposable.add(
+                Observable.fromArray(
+                        newsWithAgents.stream()
+                                .filter(newsWithAgent -> newsWithAgent.agent.isShown)
+                                .collect(Collectors.toList()))
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::displayNews)
+        );
+    }
     private void preDisplayAgent(List<Agent> agents) {
         compositeDisposable.add(Observable.fromArray(agents)
                 .observeOn(AndroidSchedulers.mainThread())
