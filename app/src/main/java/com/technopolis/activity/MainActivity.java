@@ -24,6 +24,7 @@ import com.technopolis.fragments.SettingsFragment;
 import com.technopolis.network.retrofit.HttpClient;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -97,15 +98,15 @@ public class MainActivity extends AppCompatActivity {
     private void fetchDataFromBD() {
         compositeDisposable.add(
                 agentRepository.getShownAgents()
-                        .observeOn(Schedulers.io())
+                        .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(this::displayAgents));
 
         compositeDisposable.add(
                 newsRepository.getAllNewsSortedByDate()
+                        .subscribeOn(Schedulers.io())
                         .observeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::displayNews));
+                        .subscribe(this::filterNews));
     }
 
     private void fetchDataFromServer() {
@@ -126,8 +127,8 @@ public class MainActivity extends AppCompatActivity {
                                         .doOnNext(listNews -> newsRepository.insertAllNews(listNews))
                                         .flatMap(news -> newsRepository.getAllNewsSortedByDate())
                                         .subscribeOn(Schedulers.io())
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe(this::displayNews));
+                                        .observeOn(Schedulers.io())
+                                        .subscribe(this::filterNews));
                         Log.d(LOG_TAG, "News are updated!");
                     } else {
                         Log.d(LOG_TAG, "No internet connection");
@@ -136,6 +137,16 @@ public class MainActivity extends AppCompatActivity {
         swipeContainer.setRefreshing(false);
     }
 
+    private void filterNews(List<NewsWithAgent> newsWithAgents) {
+        compositeDisposable.add(
+                Observable.fromArray(
+                        newsWithAgents.stream()
+                                .filter(newsWithAgent -> newsWithAgent.agent.isShown)
+                                .collect(Collectors.toList()))
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::displayNews)
+        );
+    }
     private void preDisplayAgent(List<Agent> agents) {
         compositeDisposable.add(Observable.fromArray(agents)
                 .observeOn(AndroidSchedulers.mainThread())
