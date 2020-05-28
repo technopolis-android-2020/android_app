@@ -65,7 +65,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         public NewsViewHolder(View view) {
             super(view);
             textTitle = view.findViewById(R.id.txt_title);
-            textContent = view.findViewById(R.id.txt_content);
+            //textContent = view.findViewById(R.id.txt_content);
             textAgent = view.findViewById(R.id.txt_agent);
             newsImage = view.findViewById(R.id.rec_item_image_view);
             card = view.findViewById(R.id.card_item);
@@ -73,7 +73,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
         void bind(NewsWithAgent news) {
             this.textTitle.setText(news.news.getTitle());
-            this.textContent.setText(news.news.getBody().substring(0, 15));
+            //this.textContent.setText(news.news.getBody().substring(0, 15));
             this.textAgent.setText(news.agent.name);
 
             card.setOnClickListener(new OnNewsClickListener(fragmentManager, news));
