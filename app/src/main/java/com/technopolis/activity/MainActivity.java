@@ -170,30 +170,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-
-        if (getFragmentManager().findFragmentById(fragmentId) != null &&
-                getFragmentManager().findFragmentById(fragmentId).isVisible()) {
-            Log.d(LOG_TAG, "menu settings open");
-            inflater.inflate(R.menu.settings_menu, menu);
-            Log.d(LOG_TAG, "menu settings inflate");
-            getFragmentManager()
-                    .findFragmentById(fragmentId)
-                    .onCreateOptionsMenu(menu, inflater);
-        } else {
-            inflater.inflate(R.menu.menu, menu);
-            Log.d(LOG_TAG, "main menu open");
-        }
+        inflater.inflate(R.menu.menu, menu);
         return true;
-
-//        int i = getSupportFragmentManager().getBackStackEntryCount();
-//        System.out.println("i:" + i);
-//        if (i != 0 && getSupportFragmentManager().getBackStackEntryAt(i-1).getName() != null && getSupportFragmentManager().getBackStackEntryAt(i-1).getName().equals("placeSettingsFragment")) {
-//            inflater.inflate(R.menu.settings_menu, menu);
-//        } else {
-         //   inflater.inflate(R.menu.menu, menu);
-      //  }
-        //if (getSupportFragmentManager().getBackStackEntryAt().getName())
-
     }
 
     @Override
@@ -206,11 +184,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void placeSettingFragment() {
-        SettingsFragment fragment = new SettingsFragment();
-        fragmentId = fragment.getId();
         getFragmentManager()
                 .beginTransaction()
-                .replace(android.R.id.content, fragment)
+                .replace(android.R.id.content, new SettingsFragment())
                 .addToBackStack("placeSettingsFragment")
                 .commit();
     }

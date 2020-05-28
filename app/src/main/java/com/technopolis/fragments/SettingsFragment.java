@@ -13,6 +13,7 @@ import androidx.preference.SwitchPreference;
 
 import com.technopolis.App;
 import com.technopolis.R;
+import com.technopolis.activity.MainActivity;
 import com.technopolis.database.entity.Agent;
 import com.technopolis.database.repositories.AgentRepository;
 
@@ -29,14 +30,13 @@ public class SettingsFragment extends PreferenceFragment {
         hideMainActivityActionBar();
         View view = super.onCreateView(inflater, container, savedInstanceState);
         view.setBackgroundColor(getResources().getColor(R.color.colorWhite));
-        getActivity().invalidateOptionsMenu();
+//        getActivity().invalidateOptionsMenu();
         setPreferences(agentRepository.getAgentsNotObservable());
         return view;
     }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-
         ((App) getActivity().getApplication()).getAppComponent().injectSettingsFragment(this);
         addPreferencesFromResource(R.xml.preference);
     }
@@ -63,11 +63,11 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void hideMainActivityActionBar() {
-        //((MainActivity) getActivity()).getSupportActionBar().hide();
+        ((MainActivity) getActivity()).getSupportActionBar().hide();
     }
 
     private void showMainActivityActionBar() {
-       // ((MainActivity) getActivity()).getSupportActionBar().show();
+        ((MainActivity) getActivity()).getSupportActionBar().show();
     }
 
 }
