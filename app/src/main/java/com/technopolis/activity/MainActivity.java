@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork;
+import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings;
 import com.technopolis.App;
 import com.technopolis.R;
 import com.technopolis.adapter.ListOfAgentsAdapter;
@@ -110,7 +112,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchDataFromServer() {
-        Single<Boolean> checkInternetConnection = ReactiveNetwork.checkInternetConnectivity();
+        Single<Boolean> checkInternetConnection = ReactiveNetwork.checkInternetConnectivity(
+                InternetObservingSettings.create());
 
         compositeDisposable.add(checkInternetConnection
                 .subscribeOn(Schedulers.io())
@@ -131,10 +134,21 @@ public class MainActivity extends AppCompatActivity {
                                         .subscribe(this::filterNews));
                         Log.d(LOG_TAG, "News are updated!");
                     } else {
+                        compositeDisposable.add(checkInternetConnection
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(v -> showToast())
+                        );
                         Log.d(LOG_TAG, "No internet connection");
                     }
                 }));
         swipeContainer.setRefreshing(false);
+    }
+
+    private void showToast() {
+        Toast.makeText(
+                getApplicationContext(),
+                R.string.noInternetConnection, Toast.LENGTH_LONG)
+                .show();
     }
 
     private void filterNews(List<NewsWithAgent> newsWithAgents) {

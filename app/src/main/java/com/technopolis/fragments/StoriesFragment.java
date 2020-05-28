@@ -26,8 +26,6 @@ public class StoriesFragment extends Fragment {
 
     public static final String BACK_STACK_NAME = "placeStoriesFragment";
 
-    StoriesFragment instance;
-
     private NewsWithAgent news;
     private Agent agent;
 
@@ -44,7 +42,7 @@ public class StoriesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ((App) getActivity().getApplication()).getAppComponent().injectStoriesFragment(this);
-        instance = this;
+        //todo use javaRX
         news = newsRepository.loadOneLastNews(agent.name);
 
         return inflater.inflate(R.layout.stories_fragment, container, false);
@@ -85,6 +83,15 @@ public class StoriesFragment extends Fragment {
     private void setListeners() {
         closeButton.setOnClickListener(v -> {
             getParentFragment().getFragmentManager().popBackStackImmediate();
+        });
+        backgroundImg.setOnClickListener(v->{
+            FullNewsFragment fullNewsFragment = new FullNewsFragment();
+            fullNewsFragment.setNews(news);
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(android.R.id.content, fullNewsFragment)
+                    .addToBackStack("fullNewsScreen")
+                    .commit();
         });
     }
 
