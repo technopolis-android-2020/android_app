@@ -5,6 +5,6 @@
 
     <PreferenceCategory
         android:key="prefCategory"
-        android:title="AGENTS"/>
+        android:title="@string/AGENTS"/>
 
 </PreferenceScreen>
