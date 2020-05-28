@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                         .subscribe(this::displayAgents));
 
         compositeDisposable.add(
-                newsRepository.getAllNews()
+                newsRepository.getAllNewsSortedByDate()
                         .observeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(this::displayNews));
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                                         //запрос новостей с сервера, добавление их в бд и отрисовка из бд
                                         .flatMap(newsResponse -> httpClient.getNewsByDate(getLatestDate()))
                                         .doOnNext(listNews -> newsRepository.insertAllNews(listNews))
-                                        .flatMap(news -> newsRepository.getAllNews())
+                                        .flatMap(news -> newsRepository.getAllNewsSortedByDate())
                                         .subscribeOn(Schedulers.io())
                                         .observeOn(AndroidSchedulers.mainThread())
                                         .subscribe(this::displayNews));
