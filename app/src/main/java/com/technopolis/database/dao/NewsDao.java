@@ -21,6 +21,9 @@ public interface NewsDao {
     @Query("SELECT * FROM news")
     Observable<List<NewsWithAgent>> getAll();
 
+    @Query("SELECT * FROM news ORDER BY publication_date")
+    Observable<List<NewsWithAgent>> getAllSorterByDate();
+
     @Query("SELECT * FROM news WHERE publication_date = :publication_date")
     List<News> getNewsByPublicationDate(long publication_date);
 

@@ -10,6 +10,7 @@ import com.technopolis.database.entity.Agent;
 
 import java.util.List;
 
+import androidx.room.Transaction;
 import io.reactivex.Observable;
 
 @Dao
@@ -20,6 +21,10 @@ public interface AgentDao {
 
     @Query("SELECT * FROM agent")
     Observable<List<Agent>> getAll();
+
+    @Transaction
+    @Query("SELECT * FROM agent WHERE is_shown = :shown")
+    Observable<List<Agent>> getAllShown(boolean shown);
 
     @Query("SELECT * FROM agent")
     List<Agent> getAllNotObservable();

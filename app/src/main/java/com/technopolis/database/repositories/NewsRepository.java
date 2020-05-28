@@ -55,6 +55,10 @@ public class NewsRepository {
         return newsDao.getAll();
     }
 
+    public Observable<List<NewsWithAgent>> getAllNewsSortedByDate() {
+        return newsDao.getAllSorterByDate();
+    }
+
     private List<News> castToNews(final List<NewsResponse> newsResponses) {
         List<News> news = new ArrayList<>();
         for (NewsResponse response : newsResponses

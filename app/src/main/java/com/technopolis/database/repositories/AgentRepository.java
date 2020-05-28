@@ -39,12 +39,20 @@ public class AgentRepository {
         return agentDao.getAll();
     }
 
+    public Observable<List<Agent>> getShownAgents() {
+        return agentDao.getAllShown(true);
+    }
+
     public List<Agent> getAgentsNotObservable() {
         return agentDao.getAllNotObservable();
     }
 
     public void insertAgents(List<AgentsResponse> agents) {
-        agentDao.insert(castToAgents(agents));
+        try {
+            agentDao.insert(castToAgents(agents));
+        } catch (Exception ignore) {
+
+        }
     }
 
     private List<Agent> castToAgents(final List<AgentsResponse> agentResponses) {
