@@ -67,7 +67,7 @@ public class FullNewsFragment extends Fragment {
     }
 
     private void fillContent() {
-        agentName.setText(news.news.getAgentName());
+        agentName.setText(news.agent.name);
         newsTitle.setText(news.news.getTitle());
         newsBody.setText(news.news.getBody());
 
